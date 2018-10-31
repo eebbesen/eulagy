@@ -1,0 +1,11 @@
+{
+  "name": "eulagy",
+  "version": "1.0.0",
+  "description": "Read EULAs to you",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC"
+}
