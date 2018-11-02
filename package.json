@@ -4,8 +4,15 @@
   "description": "Read EULAs to you",
   "main": "app.js",
   "scripts": {
-    "test": "test"
+    "test": "jest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "pg": "^7.6.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.345.0"
+  }
 }

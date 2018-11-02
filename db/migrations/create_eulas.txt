@@ -1,0 +1,10 @@
+create sequence eula_id_seq;
+
+create table eulas(id integer default nextval('eula_id_seq') not null, content text not null, company varchar(30) not null, version text, created_at timestamp with time zone, updated_at timestamp with time zone);
+
+commit;
+
+/*
+insert into eulas(content, company, version, created_at, updated_at)
+values('content of eula', 'myplacespacefacebookgramapp', '11.01.2018', clock_timestamp(), clock_timestamp());
+*/
