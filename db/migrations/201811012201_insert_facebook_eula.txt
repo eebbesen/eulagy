@@ -105,3 +105,5 @@ Date of Last Revision: April 19th, 2018',
 '04.19.2018',
 clock_timestamp(),
 clock_timestamp());
+
+commit;

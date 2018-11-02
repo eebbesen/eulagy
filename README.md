@@ -11,3 +11,18 @@ Use AWS to read EULAs
 
 ## Deploy
 1. Create PostgreSQL instance [on Amazon RDS](https://aws.amazon.com/getting-started/tutorials/create-connect-postgresql-db/)
+
+## Other
+### PostgreSQL setup notes
+1. `createuser -s postgres`
+1. `psql postgres`
+1. Run script
+```sql
+create role eulagy_user with login password 'abcd!1234';
+create database eulagy;
+GRANT ALL PRIVILEGES ON DATABASE eulagy to eulagy_user;
+create role eulagy_test with login password 'abcd!1234';
+create database eulagy_test;
+GRANT ALL PRIVILEGES ON DATABASE eulagy to eulagy_test;
+```
+
