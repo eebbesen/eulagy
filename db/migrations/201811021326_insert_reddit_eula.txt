@@ -165,7 +165,7 @@ If any provision of this user agreement is held invalid or unenforceable, that p
 
 changes to this user agreement
 53 This user agreement is the entire agreement between you and us concerning reddit. It supersedes all prior or contemporaneous agreements between you and us. We may modify this user agreement at any time. If we make changes to this agreement that materially affect your rights, we will provide advance notice and keep this edition available as an archive on the reddit website. By continuing to use reddit after a change to this agreement, you agree to those changes.',
-'facebook',
+'reddit',
 '03.21.2018',
 clock_timestamp(),
 clock_timestamp(),

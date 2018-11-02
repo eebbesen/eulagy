@@ -1,4 +1,4 @@
-insert into eulas(content, company, version, created_at, updated_at)
+insert into eulas(content, company, version, created_at, updated_at, link)
 values('Our Statement of Rights and Responsibilities is changing to our Terms of Service. You can view our previous Statement of Rights and Responsibilities here.
 Terms of Service
 
@@ -104,6 +104,7 @@ Date of Last Revision: April 19th, 2018',
 'facebook',
 '04.19.2018',
 clock_timestamp(),
-clock_timestamp());
+clock_timestamp(),
+'https://www.facebook.com/terms.php');
 
 commit;
