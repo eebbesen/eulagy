@@ -4,7 +4,7 @@
   "description": "Read EULAs to you",
   "main": "app.js",
   "scripts": {
-    "test": "test"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
