@@ -11,7 +11,7 @@ const getText = async function() {
   let rows;
   try {
     await client.connect();
-    rows = await client.query('SELECT content FROM eulas');
+    rows = await client.query('SELECT content FROM eulas OFFSET floor(random()*(select count(*) from eulas)) LIMIT 1');
     await client.end();
   } catch (err) {
     console.log('ERROR in getText', err);
