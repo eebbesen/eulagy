@@ -3,7 +3,7 @@ var config = {
     database: {
       host:     'name.random.us-east-1.rds.amazonaws.com',
       port:     '5432',
-      db:       'eulagy'
+      database: 'eulagy',
       user:     'eulagy_user',
       password: 'abcd1234^'
     }
@@ -12,7 +12,7 @@ var config = {
     database: {
       host:     'name.random.us-east-1.rds.amazonaws.com',
       port:     '5432',
-      db:       'eulagy.test'
+      database: 'eulagy',
       user:     'eulagy_user',
       password: 'abcd1234^'
     }
