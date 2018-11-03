@@ -23,9 +23,15 @@ afterEach(() => {
   cleanup();
 });
 
-test('runs query', async () => {
-  const text = await app.getText();
-  expect(text).toContain('the');
+test('runs query', () => {
+  const rec = app.getRecord();
+
+  return rec.then(data => {
+    expect(data.content).toContain('the');
+    expect(data.company.length).toBeGreaterThan(4);
+    expect(data.version).toContain('.');
+  })
+
 });
 
 test('creates mp3', () => {
@@ -33,5 +39,15 @@ test('creates mp3', () => {
 
   return ret.then((data, err) => {
     return expect(fsPromises.stat(filename)).resolves.toBeDefined();
+  });
+});
+
+test('gets all records', () => {
+  const recs = app.getAllRecords();
+  console.log('aaaaaa', recs)
+
+  return recs.then(data => {
+    expect(data.length).toBe(3);
+    expect(data[0].content).toMatch(/the/);
   });
 });
