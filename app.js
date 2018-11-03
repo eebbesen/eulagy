@@ -62,7 +62,9 @@ const synthesizeSpeech = function(text) {
 };
 
 const createMp3 = function(text, name) {
-  return synthesizeSpeech(text)
+  let counter = 0;
+  let chunk = text.substring(0, 2999);
+  return synthesizeSpeech(chunk)
     .then((data, err) => {
       if (err) {
         console.log('Error in speech synthesis of createMp3', err);

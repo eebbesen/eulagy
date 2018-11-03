@@ -1,6 +1,13 @@
 # EULAgy
 Use AWS to read EULAs
 
+## Convert
+Execute
+```js
+node lib/db_to_mp3.js
+```
+and mp3s for all content in the EULA table will be placed in the `output` directory.
+
 ## Develop
 1. [Install npm](https://www.npmjs.com/get-npm)
 1. `npm install`
