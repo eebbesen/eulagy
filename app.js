@@ -2,8 +2,7 @@
 
 const AWS = require('aws-sdk');
 const env = process.env.NODE_ENV || 'development';
-const fs = require('fs');
-const fsPromises = fs.promises;
+const fsPromises = require('fs').promises;
 const Polly = new AWS.Polly({
   signatureVersion: 'v4',
   region: 'us-east-1'
