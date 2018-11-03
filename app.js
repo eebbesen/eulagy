@@ -33,18 +33,22 @@ const getAllRecords = function() {
   }
 };
 
-// returns random EULA record
-const getRecord = async function() {
+// returns random record
+const getRecord = function() {
   const client = getClient();
   let data;
   try {
-    await client.connect();
-    data = await client.query('SELECT content, company, version FROM eulas OFFSET floor(random()*(select count(*) from eulas)) LIMIT 1');
-    await client.end();
+    client.connect();
+    return client
+      .query('SELECT content, company, version FROM eulas OFFSET floor(random()*(select count(*) from eulas)) LIMIT 1')
+      .then(rec => {
+        data = rec.rows[0];
+        client.end();
+        return data;
+      });
   } catch (err) {
     console.log('ERROR in getText', err);
   }
-  return data.rows[0];
 };
 
 // returns a promise to create an mp3 from text
