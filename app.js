@@ -11,20 +11,45 @@ const Polly = new AWS.Polly({
 // database
 const dbConfig = require('./db/config');
 const { Client } = require('pg');
-const client = new Client(dbConfig[env]);
 
-// returns random EULA text
-const getText = async function() {
-  let rows;
+function getClient() {
+  return new Client(dbConfig[env]);
+}
+
+const getAllRecords = function() {
+  const client = getClient();
+  let data;
   try {
-    await client.connect();
-    rows = await client.query('SELECT content FROM eulas OFFSET floor(random()*(select count(*) from eulas)) LIMIT 1');
-    await client.end();
+    client.connect();
+    return client
+      .query('SELECT content, company, version FROM eulas')
+      .then(recs => {
+        data = recs.rows
+        client.end();
+        return data;
+      });
   } catch (err) {
     console.log('ERROR in getText', err);
   }
-  return rows.rows[0]['content'];
-}
+};
+
+// returns random record
+const getRecord = function() {
+  const client = getClient();
+  let data;
+  try {
+    client.connect();
+    return client
+      .query('SELECT content, company, version FROM eulas OFFSET floor(random()*(select count(*) from eulas)) LIMIT 1')
+      .then(rec => {
+        data = rec.rows[0];
+        client.end();
+        return data;
+      });
+  } catch (err) {
+    console.log('ERROR in getText', err);
+  }
+};
 
 // returns a promise to create an mp3 from text
 const synthesizeSpeech = function(text) {
@@ -34,7 +59,7 @@ const synthesizeSpeech = function(text) {
     'VoiceId': 'Kimberly'
   };
   return Polly.synthesizeSpeech(params).promise();
-}
+};
 
 const createMp3 = function(text, name) {
   return synthesizeSpeech(text)
@@ -43,7 +68,7 @@ const createMp3 = function(text, name) {
         console.log('Error in speech synthesis of createMp3', err);
       } else if (data) {
         if (data.AudioStream instanceof Buffer) {
-          fsPromises.writeFile(`${name}.kimberly.mp3`, data.AudioStream)
+          fsPromises.writeFile(`${name}.kimberly.mp3`, data.AudioStream);
         }
       } else {
         throw 'createMp3: data not a Buffer!!';
@@ -52,8 +77,9 @@ const createMp3 = function(text, name) {
     .catch(err => {
       console.log('error in createMp3', err);
     });
-}
+};
 
-module.exports.getText = getText;
+module.exports.getAllRecords = getAllRecords;
+module.exports.getRecord = getRecord;
 module.exports.createMp3 = createMp3;
 module.exports.synthesizeSpeech = synthesizeSpeech;
