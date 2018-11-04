@@ -1,5 +1,5 @@
 # EULAgy
-Use AWS to read EULAs
+Use AWS Polly to create mp3s from EULA text.
 
 ## Convert text to mp3
 Execute
