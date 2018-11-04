@@ -33,3 +33,20 @@ create database eulagy_test;
 GRANT ALL PRIVILEGES ON DATABASE eulagy to eulagy_test;
 ```
 
+### Helper functions
+#### List buckets
+```bash
+node lib/buckets
+```
+
+#### Create bucket
+Bucket name defaults to `eulagy`. Will not create a bucket that already exists.
+```bash
+node lib/buckets create [name]
+```
+
+#### Upload files
+Will upload all files from `output` to S3 bucket named `eulagy`. DOES NOT check for duplicates, so move records from `output` to `uploaded` once they are uploaded.
+```bash
+node lib/buckets upload
+```
