@@ -46,7 +46,7 @@ node lib/buckets create [name]
 ```
 
 #### Upload files
-Will upload all files from `output` to S3 bucket named `eulagy`
+Will upload all files from `output` to S3 bucket named `eulagy`. DOES NOT check for duplicates, so move records from `output` to `uploaded` once they are uploaded.
 ```bash
 node lib/buckets upload
 ```
