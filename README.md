@@ -1,7 +1,7 @@
 # EULAgy
-Use AWS to read EULAs
+Use AWS Polly to create mp3s from EULA text.
 
-## Convert
+## Convert text to mp3
 Execute
 ```js
 node lib/db_to_mp3.js
@@ -29,8 +29,8 @@ create role eulagy_user with login password 'abcd!1234';
 create database eulagy;
 GRANT ALL PRIVILEGES ON DATABASE eulagy to eulagy_user;
 create role eulagy_test with login password 'abcd!1234';
-create database eulagy_test;
-GRANT ALL PRIVILEGES ON DATABASE eulagy to eulagy_test;
+create database eulagy_test_user;
+GRANT ALL PRIVILEGES ON DATABASE eulagy_test to eulagy_test_user;
 ```
 
 ### Helper functions

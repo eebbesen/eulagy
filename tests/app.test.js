@@ -51,3 +51,8 @@ test('gets all records', () => {
     expect(data[0].content).toMatch(/the/);
   });
 });
+
+test.only('inserts audio', () => {
+  app.insertAudio(`${__dirname}/files/facebook.04.19.2018.0.kimberly.mp3`, 'facebook')
+    .then(() => {});
+});

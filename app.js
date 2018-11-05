@@ -22,7 +22,7 @@ const getAllRecords = function() {
   try {
     client.connect();
     return client
-      .query('SELECT content, company, version FROM eulas')
+      .query('SELECT content, company, version, audio FROM eulas')
       .then(recs => {
         data = recs.rows
         client.end();
@@ -40,7 +40,7 @@ const getRecord = function() {
   try {
     client.connect();
     return client
-      .query('SELECT content, company, version FROM eulas OFFSET floor(random()*(select count(*) from eulas)) LIMIT 1')
+      .query('SELECT content, company, version, audio FROM eulas OFFSET floor(random()*(select count(*) from eulas)) LIMIT 1')
       .then(rec => {
         data = rec.rows[0];
         client.end();
@@ -79,7 +79,50 @@ const createMp3 = function(text, name) {
     });
 };
 
+// thanks to https://codereview.stackexchange.com/questions/88788/save-file-from-request-to-database
+const insertAudio = function(file, company) {
+  const client = getClient();
+  try {
+    return fsPromises.readFile(`${file}`)
+      .then(d => {
+        const data = '\\x' + d.toString('hex');
+        client.connect();
+
+        return client
+          .query(`update eulas set audio = $1 where company = '${company}'`, [data])
+          .then(d => {
+            console.log(`done uploading ${file} to ${company}`);
+            client.end();
+          });
+      });
+  } catch (err) {
+    console.log('ERROR in insertAudio', err);
+  }
+};
+
+const downloadAudio = function(company) {
+  const client = getClient();
+  try {
+    client.connect();
+    return client
+      .query(`SELECT content, company, version, audio FROM eulas WHERE company = '${company}'`)
+      .then(recs => {
+        const rec = recs.rows[0]
+        const audio = rec.audio;
+
+        return fsPromises.writeFile(`output/${company}.downloaded.mp3`, audio)
+          .then(() => {
+            client.end();
+          });
+      });
+  } catch (err) {
+    console.log('ERROR in getText', err);
+  }
+};
+
 module.exports.getAllRecords = getAllRecords;
 module.exports.getRecord = getRecord;
 module.exports.createMp3 = createMp3;
 module.exports.synthesizeSpeech = synthesizeSpeech;
+module.exports.insertAudio = insertAudio;
+module.exports.downloadAudio = downloadAudio;
