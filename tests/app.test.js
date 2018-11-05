@@ -23,16 +23,23 @@ afterEach(() => {
   cleanup();
 });
 
-test.only('runs query', () => {
-  jest.setTimeout(30000)
+test.only('runs query', (done) => {
+  jest.setTimeout(10000)
   const rec = app.getRecord();
 
-  return rec.then(data => {
-    console.log('aaaaaaa', data)
-    expect(data.content).toContain('the');
-    expect(data.company.length).toBeGreaterThan(4);
-    expect(data.version).toContain('.');
-  })
+  console.log('bbbbbb', rec)
+  return rec
+    .then(data => {
+      console.log('aaaaaaa', data)
+      expect(data.content).toContain('the');
+      expect(data.company.length).toBeGreaterThan(4);
+      expect(data.version).toContain('.');
+      done();
+    })
+    .catch(err => {
+      console.log('error: ' + err);
+      done(err);
+    })
 
 });
 
