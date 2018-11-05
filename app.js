@@ -15,6 +15,7 @@ if (process.env.CIRCLE_CI){
 } else {
   dbConfig = require('./db/config');
 }
+console.log('xxxxxx', dbConfig);
 const { Client } = require('pg');
 
 function getClient() {
