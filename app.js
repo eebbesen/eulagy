@@ -9,7 +9,12 @@ const Polly = new AWS.Polly({
 });
 
 // database
-const dbConfig = require('./db/config');
+let dbConfig;
+if (process.env.CIRCLE_CI){
+  dbConfig = require('./db/ci_config');
+} else {
+  dbConfig = require('./db/config');
+}
 const { Client } = require('pg');
 
 function getClient() {
