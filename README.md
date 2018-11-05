@@ -13,7 +13,7 @@ In both cases you can access the mp3 bytes (using the `audio` property of the re
 See `lib/file_utils.downloadMp3` for reference implementation that saves the data to an mp3 file locally.
 
 ## How EULAgy works
-EULAgy uses AWS Polly to create mp3s from EULA text stored in PostgreSQL. The mp3s are then stored in the same PostgreSQL instance, allowing you to run the costly conversion one time and use the results infinitely.
+EULAgy uses AWS Polly to create mp3s from EULA text stored in PostgreSQL. The mp3s are then stored in the same PostgreSQL instance using the `bytea` datatype, allowing you to run the costly conversion one time and use the results infinitely.
 
 ## Convert text to mp3
 Using the `EULAS.CONTENT` field, create mp3 files.
@@ -62,26 +62,16 @@ GRANT ALL PRIVILEGES ON DATABASE eulagy_test to eulagy_test_user;
 ```
 4. Manually run db/migrations/ files in each database
 
-### Helper functions
-#### Create bucket
+## Helper functions
+## S3
+You can also store artifacts in S3!
+### Create bucket
 Bucket name defaults to `eulagy`. Will not create a bucket that already exists.
 ```bash
 node lib/buckets create [name]
 ```
 
-#### List buckets
+### List buckets
 ```bash
 node lib/buckets
 ```
-
-## Experimental
-### PostgreSQL for testing in Circle CI
-Working on using RDS instance from Circle CI to run unit tests, but there is a connection timeout when connecting to the database ( maybe because of some AWS or Circle CI restrictions?). So this doesn't work yet.
-
-#### Configure
-Populate db/ci_config.yml with the non-secret info for your RDS instance, and set the following environment variables in Circle CI for your project:
-* AWS_ACCESS_KEY_ID
-* AWS_SECRET_ACCESS_KEY
-* CI_PG_HOST: database host
-* CI_PG_PASS: database user password
-
