@@ -6,7 +6,7 @@ EULAgy is a utility that can be plugged into an application that will stream an 
 
 ### Selecting audio
 * `app.getRecord()` will select a random record from the database
-* `app.getAllRecords()` will retrieve all records from the dabase
+* `app.getAllRecords()` will retrieve all records from the database
 
 In both cases you can access the mp3 bytes (using the `audio` property of the returned row(s)) and stream or save that to a file.
 
