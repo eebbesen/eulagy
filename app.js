@@ -8,14 +8,15 @@ const Polly = new AWS.Polly({
   region: 'us-east-1'
 });
 
+console.log('111111', AWS.config.credentials.constructor)
 // database
 let dbConfig;
 if (process.env.CIRCLECI){
   dbConfig = require('./db/ci_config');
   AWS.config.update({
     region: 'us-east-1',
-    accessKeyId: process.env.AWS_KEY,
-    secretAccessKey: process.env.AWS_SECRET,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   });
 } else {
   dbConfig = require('./db/config');
