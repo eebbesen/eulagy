@@ -52,7 +52,7 @@ test('gets all records', () => {
   });
 });
 
-test.only('inserts audio', () => {
+test('inserts audio', () => {
   app.insertAudio(`${__dirname}/files/facebook.04.19.2018.0.kimberly.mp3`, 'facebook')
     .then(() => {});
 });
