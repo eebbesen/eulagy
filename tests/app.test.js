@@ -38,7 +38,6 @@ test('runs query', (done) => {
       console.log('error: ' + err);
       done(err);
     })
-
 });
 
 test('creates mp3', () => {
