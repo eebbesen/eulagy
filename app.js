@@ -10,12 +10,18 @@ const Polly = new AWS.Polly({
 
 // database
 let dbConfig;
-if (process.env.CIRCLE_CI){
+if (process.env.CIRCLECI){
   dbConfig = require('./db/ci_config');
+  AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId: 'accessKeyId',
+    secretAccessKey: 'secretAccessKey',
+  });
 } else {
   dbConfig = require('./db/config');
 }
 console.log('xxxxxx', dbConfig);
+console.log('yyyyyy', AWS.config)
 const { Client } = require('pg');
 
 function getClient() {
