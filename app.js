@@ -7,6 +7,7 @@ const Polly = new AWS.Polly({
   signatureVersion: 'v4',
   region: 'us-east-1'
 });
+const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 // database
 const dbConfig = require('./db/config');
@@ -15,6 +16,29 @@ const { Client } = require('pg');
 function getClient() {
   return new Client(dbConfig[env]);
 }
+
+const handler = function(event, context, callback) {
+  const rec = event.Records[0];
+  const fileName = rec.s3.object.key;
+  const parts = filename.split['-'];
+  const company = parts[0];
+  const version = parts[1];
+
+  const params = { Bucket: 'eulagy', Key: fileName };
+  s3.getObject(params, function (err, data) {
+    if (err) {
+      console.log("Error", err, data);
+    }
+    return data.Body;
+  }).promise()
+  .then(text => {
+    let counter = 0;
+    const chunks = text.match(/[\s\S]{1,3000}/g);
+    chunks.forEach(c => {
+      app.createMp3(c, `output/${company}.${version}.${counter++}`);
+    });
+  });
+};
 
 const getAllRecords = function() {
   const client = getClient();
@@ -141,3 +165,4 @@ module.exports.createMp3 = createMp3;
 module.exports.synthesizeSpeech = synthesizeSpeech;
 module.exports.insertAudio = insertAudio;
 module.exports.downloadAudio = downloadAudio;
+module.exports.handler = handler;
