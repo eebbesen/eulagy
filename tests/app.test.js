@@ -1,7 +1,7 @@
 const app = require('../app');
 const AWS = require('aws-sdk');
 const fs = require('fs');
-const fsPromises = fs.promises;
+const fsPromises = require('fs').promises;
 
 const filename = 'hello_test.kimberly.mp3';
 

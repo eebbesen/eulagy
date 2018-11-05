@@ -8,7 +8,6 @@ const Polly = new AWS.Polly({
   region: 'us-east-1'
 });
 
-console.log('111111', AWS.config.credentials.constructor)
 // database
 let dbConfig;
 if (process.env.CIRCLECI){
