@@ -26,6 +26,10 @@ jobs:
       #     # fallback to using the latest cache if no exact match is found
       #     - v1-dependencies-
 
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+
       - run: npm install
 
       # - save_cache:

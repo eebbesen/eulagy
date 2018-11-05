@@ -23,10 +23,12 @@ afterEach(() => {
   cleanup();
 });
 
-test('runs query', () => {
+test.only('runs query', () => {
+  jest.setTimeout(30000)
   const rec = app.getRecord();
 
   return rec.then(data => {
+    console.log('aaaaaaa', data)
     expect(data.content).toContain('the');
     expect(data.company.length).toBeGreaterThan(4);
     expect(data.version).toContain('.');
