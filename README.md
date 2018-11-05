@@ -63,7 +63,7 @@ GRANT ALL PRIVILEGES ON DATABASE eulagy_test to eulagy_test_user;
 4. Manually run db/migrations/ files in each database
 
 ### S3 bucket policy
-1. Create an AWS role with AWSLambdaExecute
+1. Create an AWS role with AWSLambdaExecute and AmazonPollyFullAccess
 1. Add this policy to the bucket
 ```
 {
