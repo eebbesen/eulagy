@@ -14,14 +14,12 @@ if (process.env.CIRCLECI){
   dbConfig = require('./db/ci_config');
   AWS.config.update({
     region: 'us-east-1',
-    accessKeyId: 'accessKeyId',
-    secretAccessKey: 'secretAccessKey',
+    accessKeyId: process.env.AWS_KEY,
+    secretAccessKey: process.env.AWS_SECRET,
   });
 } else {
   dbConfig = require('./db/config');
 }
-console.log('xxxxxx', dbConfig);
-console.log('yyyyyy', AWS.config)
 const { Client } = require('pg');
 
 function getClient() {

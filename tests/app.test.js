@@ -44,7 +44,6 @@ test('creates mp3', () => {
 
 test('gets all records', () => {
   const recs = app.getAllRecords();
-  console.log('aaaaaa', recs)
 
   return recs.then(data => {
     expect(data.length).toBe(3);
