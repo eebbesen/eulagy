@@ -1,7 +1,7 @@
 const app = require('../app');
 const AWS = require('aws-sdk');
 const fs = require('fs');
-const fsPromises = fs.promises;
+const fsPromises = require('fs').promises;
 
 const filename = 'hello_test.kimberly.mp3';
 
@@ -23,14 +23,21 @@ afterEach(() => {
   cleanup();
 });
 
-test('runs query', () => {
+test('runs query', (done) => {
+  jest.setTimeout(10000)
   const rec = app.getRecord();
 
-  return rec.then(data => {
-    expect(data.content).toContain('the');
-    expect(data.company.length).toBeGreaterThan(4);
-    expect(data.version).toContain('.');
-  })
+  return rec
+    .then(data => {
+      expect(data.content).toContain('the');
+      expect(data.company.length).toBeGreaterThan(4);
+      expect(data.version).toContain('.');
+      done();
+    })
+    .catch(err => {
+      console.log('error: ' + err);
+      done(err);
+    })
 
 });
 
@@ -44,7 +51,6 @@ test('creates mp3', () => {
 
 test('gets all records', () => {
   const recs = app.getAllRecords();
-  console.log('aaaaaa', recs)
 
   return recs.then(data => {
     expect(data.length).toBe(3);
@@ -52,7 +58,7 @@ test('gets all records', () => {
   });
 });
 
-test.only('inserts audio', () => {
+test('inserts audio', () => {
   app.insertAudio(`${__dirname}/files/facebook.04.19.2018.0.kimberly.mp3`, 'facebook')
     .then(() => {});
 });

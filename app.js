@@ -9,7 +9,17 @@ const Polly = new AWS.Polly({
 });
 
 // database
-const dbConfig = require('./db/config');
+let dbConfig;
+if (process.env.CIRCLECI){
+  dbConfig = require('./db/ci_config');
+  AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+} else {
+  dbConfig = require('./db/config');
+}
 const { Client } = require('pg');
 
 function getClient() {
@@ -27,8 +37,13 @@ const getAllRecords = function() {
         data = recs.rows
         client.end();
         return data;
+      })
+      .catch(e => {
+        console.log('ERROR selecting all records', e);
+        client.end();
       });
   } catch (err) {
+    client.end();
     console.log('ERROR in getText', err);
   }
 };
@@ -45,6 +60,10 @@ const getRecord = function() {
         data = rec.rows[0];
         client.end();
         return data;
+      })
+      .catch(e => {
+        console.log('ERROR selecting random record', e);
+        client.end();
       });
   } catch (err) {
     console.log('ERROR in getText', err);
@@ -96,6 +115,7 @@ const insertAudio = function(file, company) {
           });
       });
   } catch (err) {
+    client.end();
     console.log('ERROR in insertAudio', err);
   }
 };
@@ -114,9 +134,14 @@ const downloadAudio = function(company) {
           .then(() => {
             client.end();
           });
+      })
+      .catch(e => {
+        console.log('ERROR selecting record', e);
+        client.end();
       });
   } catch (err) {
-    console.log('ERROR in getText', err);
+    client.end();
+    console.log('ERROR in downloadAudio', err);
   }
 };
 

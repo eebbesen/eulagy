@@ -50,3 +50,17 @@ Will upload all files from `output` to S3 bucket named `eulagy`. DOES NOT check 
 ```bash
 node lib/buckets upload
 ```
+
+## Experimental
+
+
+### PostgreSQL for testing in Circle CI
+Working on using RDS instance from Circle CI to run unit tests, but there is a connection timeout when connecting to the database ( maybe because of some AWS or Circle CI restrictions?). So this doesn't work yet.
+
+#### Configure
+Populate db/ci_config.yml with the non-secret info for your RDS instance, and set the following environment variables in Circle CI for your project:
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* CI_PG_HOST: database host
+* CI_PG_PASS: database user password
+
