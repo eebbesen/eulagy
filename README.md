@@ -5,7 +5,7 @@ Get a EULA read to you.
 EULAgy is a utility that can be plugged into an application that will stream an mp3. There is some seed data available in this project, but you are encouraged to add more EULAs yourself.
 
 ## How EULAgy works
-EULAgy uses AWS Polly to create mp3s from EULA text.
+EULAgy uses AWS Polly to create mp3s from EULA text. EULAgy is designed to work on AWS Lambda.
 
 ## Convert text to mp3
 Using the `EULAS.CONTENT` field, create mp3 files.
@@ -26,7 +26,6 @@ node lib/buckets upload
 1. `npm test` to validate setup!
 
 ## Deploy
-
 ### S3 bucket policy
 1. Create a bucket in S3
 1. Create a folder named `uploaded` in the bucket
@@ -47,6 +46,13 @@ node lib/buckets upload
     ]
 }
 ```
+
+### Lambda
+1. Create a new Lambda function with the new role you created
+1. Give the function a Timeout of 10 seconds
+1. Run `npm run zpack` to create the artifact in the `build` directory
+1. Upload the artifact to your Lambda
+
 
 ## Helper functions
 ### S3

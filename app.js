@@ -18,7 +18,8 @@ const handler = function(event) {
       return data.Body.toString();
     })
     .then((text) => {
-      const chunks = text.match(/[\s\S]{1,3000}/g)
+      const chunks = text.match(/[\s\S]{1,2999}/g)
+      console.log('chunking', chunks[0]);
       return synthesizeSpeech(chunks[0]);
     })
     .then(mp3 => {
