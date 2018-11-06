@@ -23,6 +23,24 @@ afterEach(() => {
   cleanup();
 });
 
+test.only('handler does it all', () => {
+  const event = {
+    Records: [{
+      s3: {
+        object: {
+          key: 'humegatech-11.05.2018.txt'
+        }
+      }
+    }]
+  };
+
+  // console.log('ddddddoooooonnnneee', app.handler(event))
+  app.handler(event)
+    .then(e => {
+      console.log('ddddddoooooonnnneee');
+    })
+});
+
 test('runs query', (done) => {
   jest.setTimeout(10000)
   const rec = app.getRecord();
