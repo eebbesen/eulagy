@@ -1,7 +1,6 @@
 'use strict'
 
 const AWS = require('aws-sdk');
-const env = process.env.NODE_ENV || 'development';
 const Polly = new AWS.Polly({
   signatureVersion: 'v4',
   region: 'us-east-1'
@@ -23,6 +22,11 @@ const handler = function(event) {
     .then(mp3 => {
       return s3Helper
         .uploadFile(`uploaded/${fileName.replace('txt', 'mp3')}`, mp3.AudioStream);
+    })
+    .then((createDetails) => {
+      s3Helper
+        .deleteFile(fileName);
+      return createDetails;
     });
 };
 

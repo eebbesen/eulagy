@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --detectOpenHandles",
-    "zpack": "rm -rf node_modules/*; npm install --only=production; VER=`grep version package.json | perl -nle 'print $& if m{\\d.\\d.\\d}'`;zip -r builds/eulagy-$VER.zip app.js package.json db node_modules; npm install"
+    "zpack": "rm -rf node_modules/*; npm install --only=production; VER=`grep version package.json | perl -nle 'print $& if m{\\d.\\d.\\d}'`;zip -r builds/eulagy-$VER.zip app.js package.json db lib node_modules; npm install"
   },
   "author": "",
   "license": "ISC",

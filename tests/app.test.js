@@ -17,7 +17,7 @@ test('handler creates mp3', () => {
 
   return fsPromises.readFile('tests/files/humegatech-11.05.2018.txt.slug')
     .then((buffer, err) => {
-      s3Helper.uploadFile('humegatech-11.05.2018.txt.slug', buffer);
+      return s3Helper.uploadFile('humegatech-11.05.2018.txt.slug', buffer);
     })
     .then(() => {
       return app.handler(event);
