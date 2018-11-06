@@ -17,41 +17,62 @@ function getClient() {
   return new Client(dbConfig[env]);
 }
 
+function getFile(name) {
+  const params = { Bucket: 'eulagy', Key: name };
+  return s3.getObject(params, function (err, data) {
+      if (err) {
+        console.log("Error", err, data);
+      }
+    }).promise();
+}
+
 const handler = function(event) {
   const rec = event.Records[0];
   const fileName = rec.s3.object.key;
   const parts = fileName.split('-');
   const company = parts[0];
   const version = parts[1];
+  const client = getClient();
   let text
   let rows
 
-  const params = { Bucket: 'eulagy', Key: fileName };
-  return s3.getObject(params, function (err, data) {
-    if (err) {
-      console.log("Error", err, data);
-    }
-  }).promise()
+  return getFile(fileName)
   .then(data => {
     text = data.Body.toString()
   })
   .then(() => {
-    return synthesizeSpeech(text)
+    const rr = synthesizeSpeech(text)
+    return rr
   })
   .then(mp3 => {
-    const client = getClient();
+    console.log('finalfinalfinalfinalfinalfinal', new Date().toISOString(), mp3)
     client.connect();
-console.log('yyyyy', mp3)
+    console.log('11111111', new Date().toISOString());
     return client
-      .query('insert into eulas(content, company, version, audio) values ($1, $2, $3, $4) RETURNING *', [text, company, version, ('\\x' + mp3.AudioStream.toString('hex'))])
-      .then(ret => {
-        console.log('zzzzzzz', ret)
+      // .query('insert into eulas(content, company, version, audio) values ($1, $2, $3, $4) RETURNING *', [text, company, version, ('\\x' + mp3.AudioStream.toString('hex'))])
+      .query('select * from eulas')
+      .then((qr, err) => {
+        console.log('22222222', new Date().toISOString(), qr, err);
         client.end();
-        rows = ret.rows;
-        return rows
-      })
-  });
+        console.log('33333333', new Date().toISOString());
+      });
+  }).
+  catch(err => {
+    console.log('4444444444', err);
+  })
+  // .then(mp3 => {
+  //   client.connect();
+  //   console.log('yyyyy', mp3)
+  //   return client
+  //     .query('insert into eulas(content, company, version, audio) values ($1, $2, $3, $4) RETURNING *', [text, company, version, ('\\x' + mp3.AudioStream.toString('hex'))])
+  // })
+  // .then(dd => {
+  //   client.end();
+  //   console.log('aaaaaa', dd)
+  //   return dd;
+  // });
 };
+
     // let counter = 0;
     // const chunks = text.Body.toString().match(/[\s\S]{1,3000}/g);
     // synthesizeSpeech(chunks[0])

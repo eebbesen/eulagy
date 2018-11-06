@@ -34,9 +34,10 @@ test.only('handler does it all', () => {
     }]
   };
 
+  // console.log('ddddddoooooonnnneee', app.handler(event))
   app.handler(event)
-    .then(ret => {
-      console.log('xxxxxx', ret);
+    .then(e => {
+      console.log('ddddddoooooonnnneee');
     })
 });
 
