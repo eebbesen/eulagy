@@ -1,6 +1,10 @@
 'use strict'
 
 const AWS = require('aws-sdk');
+const Comprehend = new AWS.Comprehend({
+  apiVersion: '2017-11-27',
+  region: 'us-east-1'
+});
 const Polly = new AWS.Polly({
   signatureVersion: 'v4',
   region: 'us-east-1'
@@ -11,14 +15,16 @@ const s3Helper = require('./lib/bucket_utils');
 const handler = function(event) {
   const rec = event.Records[0];
   const fileName = rec.s3.object.key;
+
+  let text;
   let createDetails;
 
   return s3Helper.downloadFile(fileName)
     .then(data => {
       return data.Body.toString();
     })
-    .then((text) => {
-      const chunks = text.match(/[\s\S]{1,2999}/g)
+    .then((eulaText) => {
+      const chunks = eulaText.match(/[\s\S]{1,2999}/g)
       return synthesizeSpeech(chunks[0]);
     })
     .then(mp3 => {
@@ -31,7 +37,7 @@ const handler = function(event) {
         s3Helper
           .deleteFile(fileName);
       } catch (err) {
-        console.log(`Issue deleting ${fileName}`);
+        console.log(`EULAGY:: Issue deleting ${fileName}`);
       }
     })
     .then(() => {
@@ -49,5 +55,23 @@ const synthesizeSpeech = function(text) {
   return Polly.synthesizeSpeech(params).promise();
 };
 
-module.exports.synthesizeSpeech = synthesizeSpeech;
+const detectSentiment = function(text) {
+  const params = {
+    LanguageCode: 'en',
+    Text: text
+  };
+  return Comprehend.detectSentiment(params).promise();
+};
+
+const detectKeyPhrases = function(text) {
+  const params = {
+    LanguageCode: 'en',
+    Text: text
+  };
+  return Comprehend.detectKeyPhrases(params).promise();
+};
+
 module.exports.handler = handler;
+module.exports.detectKeyPhrases = detectKeyPhrases;
+module.exports.detectSentiment = detectSentiment;
+module.exports.synthesizeSpeech = synthesizeSpeech;

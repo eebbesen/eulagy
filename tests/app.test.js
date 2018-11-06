@@ -26,3 +26,29 @@ test('handler creates mp3', () => {
       expect(file.key).toEqual('uploaded/humegatech-11.05.2018.mp3.slug');
     });
 });
+
+test('detects sentiment', () => {
+  return fsPromises.readFile('eulas/facebook/04.19.2018.txt')
+    .then((buffer, err) => {
+      const text = buffer.toString();
+      const chunks = text.match(/[\s\S]{1,4999}/g)
+      return app.detectSentiment(chunks[0]);
+    })
+    .then((sentiment) => {
+      // console.log('xxxxxx', sentiment);
+      expect(sentiment.Sentiment).toEqual('NEUTRAL');
+    });
+});
+
+test('detects key phrases', () => {
+  return fsPromises.readFile('eulas/facebook/04.19.2018.txt')
+    .then((buffer, err) => {
+      const text = buffer.toString();
+      const chunks = text.match(/[\s\S]{1,4999}/g)
+      return app.detectKeyPhrases(chunks[0]);
+    })
+    .then((keyPhrases) => {
+      // console.log('xxxxxx', keyPhrases);
+      expect(keyPhrases.KeyPhrases.length).toBeGreaterThan(10);
+    });
+});
