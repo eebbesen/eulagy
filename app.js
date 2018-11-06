@@ -12,7 +12,6 @@ const s3Helper = require('./lib/bucket_utils');
 const handler = function(event) {
   const rec = event.Records[0];
   const fileName = rec.s3.object.key;
-  let text;
 
   return s3Helper.downloadFile(fileName)
     .then(data => {
