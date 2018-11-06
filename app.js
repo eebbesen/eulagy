@@ -18,7 +18,8 @@ const handler = function(event) {
       return data.Body.toString();
     })
     .then((text) => {
-      return synthesizeSpeech(text);
+      const chunks = text.match(/[\s\S]{1,3000}/g)
+      return synthesizeSpeech(chunks[0]);
     })
     .then(mp3 => {
       return s3Helper
