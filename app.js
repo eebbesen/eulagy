@@ -19,7 +19,6 @@ const handler = function(event) {
     })
     .then((text) => {
       const chunks = text.match(/[\s\S]{1,2999}/g)
-      console.log('chunking', chunks[0]);
       return synthesizeSpeech(chunks[0]);
     })
     .then(mp3 => {
