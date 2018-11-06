@@ -28,7 +28,9 @@ node lib/buckets upload
 ## Deploy
 
 ### S3 bucket policy
-1. Create an AWS role with AWSLambdaExecute and AmazonPollyFullAccess
+1. Create a bucket in S3
+1. Create a folder named `uploaded` in the bucket
+1. Create an AWS role with AWSLambdaExecute, AmazonPollyFullAccess and AmazonS3FullAccess
 1. Add this policy to the bucket
 ```
 {

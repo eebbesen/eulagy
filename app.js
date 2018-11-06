@@ -11,6 +11,7 @@ const s3Helper = require('./lib/bucket_utils');
 const handler = function(event) {
   const rec = event.Records[0];
   const fileName = rec.s3.object.key;
+  let createDetails;
 
   return s3Helper.downloadFile(fileName)
     .then(data => {
@@ -23,10 +24,17 @@ const handler = function(event) {
       return s3Helper
         .uploadFile(`uploaded/${fileName.replace('txt', 'mp3')}`, mp3.AudioStream);
     })
-    .then((createDetails) => {
-      s3Helper
-        .deleteFile(fileName);
-      return createDetails;
+    .then((cd) => {
+      createDetails = cd;
+      try {
+        s3Helper
+          .deleteFile(fileName);
+      } catch (err) {
+        console.log(`Issue deleting ${fileName}`);
+      }
+    })
+    .then(() => {
+      return createDetails
     });
 };
 
