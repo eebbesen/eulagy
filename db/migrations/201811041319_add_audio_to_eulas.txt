@@ -1,4 +1,0 @@
-ALTER TABLE eulas
-ADD COLUMN audio bytea;
-
-COMMIT;

@@ -1,4 +1,0 @@
-ALTER TABLE eulas
-ADD COLUMN link varchar(400);
-
-COMMIT;

@@ -1,81 +1,28 @@
 const app = require('../app');
 const AWS = require('aws-sdk');
-const fs = require('fs');
 const fsPromises = require('fs').promises;
+const s3Helper = require('../lib/bucket_utils');
 
-const filename = 'hello_test.kimberly.mp3';
-
-function cleanup() {
-  try {
-    if (fs.statSync(filename)) {
-      fs.unlinkSync(filename);
-    }
-  } catch (err) {
-    // nothing
-  }
-}
-
-beforeEach(() => {
-  cleanup();
-});
-
-afterEach(() => {
-  cleanup();
-});
-
-test.only('handler does it all', () => {
+// live test, requires file humegatech-11.05.2018.txt in eulagy root in S3 so we upload it
+test('handler creates mp3', () => {
   const event = {
     Records: [{
       s3: {
         object: {
-          key: 'humegatech-11.05.2018.txt'
+          key: 'humegatech-11.05.2018.txt.slug'
         }
       }
     }]
   };
 
-  // console.log('ddddddoooooonnnneee', app.handler(event))
-  app.handler(event)
-    .then(e => {
-      console.log('ddddddoooooonnnneee');
+  return fsPromises.readFile('tests/files/humegatech-11.05.2018.txt.slug')
+    .then((buffer, err) => {
+      return s3Helper.uploadFile('humegatech-11.05.2018.txt.slug', buffer);
     })
-});
-
-test('runs query', (done) => {
-  jest.setTimeout(10000)
-  const rec = app.getRecord();
-
-  return rec
-    .then(data => {
-      expect(data.content).toContain('the');
-      expect(data.company.length).toBeGreaterThan(4);
-      expect(data.version).toContain('.');
-      done();
+    .then(() => {
+      return app.handler(event);
     })
-    .catch(err => {
-      console.log('error: ' + err);
-      done(err);
-    })
-});
-
-test('creates mp3', () => {
-  const ret = app.createMp3('This is some text', 'hello_test');
-
-  return ret.then((data, err) => {
-    return expect(fsPromises.stat(filename)).resolves.toBeDefined();
-  });
-});
-
-test('gets all records', () => {
-  const recs = app.getAllRecords();
-
-  return recs.then(data => {
-    expect(data.length).toBe(3);
-    expect(data[0].content).toMatch(/the/);
-  });
-});
-
-test('inserts audio', () => {
-  app.insertAudio(`${__dirname}/files/facebook.04.19.2018.0.kimberly.mp3`, 'facebook')
-    .then(() => {});
+    .then((file) => {
+      expect(file.key).toEqual('uploaded/humegatech-11.05.2018.mp3.slug');
+    });
 });
