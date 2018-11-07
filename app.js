@@ -74,7 +74,7 @@ const detectKeyPhrases = function(text) {
 // count and sort map by count of key (lower case)
 const sortEntriesByValues = function(arr) {
   const occ = arr.reduce((occ, val) => occ.set(val.Text.toLowerCase(), 1 + (occ.get(val.Text.toLowerCase()) || 0)), new Map());
-  return new Map([...occ.entries()].sort((a, b) => b[1] - a[1]))
+  return new Map([...occ.entries()].sort((a, b) => b[1] - a[1]));
 };
 
 module.exports.handler = handler;
