@@ -19,20 +19,13 @@ And (shhhh, don't tell) EULAgy will work for _any_ text file, not just EULAs :).
 ### AWS Lambda
 See Deploy below. Place txt files in the root S3 bucket -- output will appear in the `uploaded` folder of the S3 bucket.
 
-### Command Line
-#### Upload files to S3
-Will upload all files from `output` to S3 bucket named `eulagy`. DOES NOT check for duplicates, so move records from `output` to `uploaded` once they are uploaded.
-```bash
-node lib/buckets upload
-```
-
 ## Develop
 1. [Install npm](https://www.npmjs.com/get-npm)
 1. `npm install`
 1. `npm test` to validate setup!
 
 ## Deploy
-### S3 bucket policy
+### S3 bucket
 1. Create a bucket in S3
 1. Create a folder named `uploaded` in the bucket
 1. Create an AWS role with AWSLambdaExecute, AmazonPollyFullAccess, AmazonS3FullAccess and ComprehendFullAccess
@@ -52,12 +45,13 @@ node lib/buckets upload
     ]
 }
 ```
+5. Replace bucket references in JavaScript code with your bucket name
 
 ### Lambda
 1. Create a new Lambda function with the role you created
 1. Give the function a Timeout of 10 seconds
-1. Run `npm run zpack` to create the artifact in the `build` directory
-1. Upload the artifact to your Lambda
+1. Run `npm run zpack` to create the artifact (a zip file) in the `build` directory
+1. Upload the artifact to your Lambda function in AWS
 
 
 ----
