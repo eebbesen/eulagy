@@ -24,6 +24,7 @@ const handler = function(event) {
       return data.Body.toString();
     })
     .then((eulaText) => {
+      text = eulaText;
       const chunks = eulaText.match(/[\s\S]{1,2999}/g)
       return synthesizeSpeech(chunks[0]);
     })
@@ -31,7 +32,7 @@ const handler = function(event) {
       return s3Helper
         .uploadFile(`uploaded/${fileName.replace('txt', 'mp3')}`, mp3.AudioStream);
     })
-    .then((cd) => {
+    .then(cd => {
       createDetails = cd;
       try {
         s3Helper
@@ -39,6 +40,16 @@ const handler = function(event) {
       } catch (err) {
         console.log(`EULAGY:: Issue deleting ${fileName}`);
       }
+    })
+    .then(() => {
+      const chunks = text.match(/[\s\S]{1,4900}/g);
+      return detectKeyPhrases(chunks[0]);
+    })
+    .then(kp => {
+      const vals = sortEntriesByValues(kp.KeyPhrases);
+      const csv = mapToCsv(vals);
+      return s3Helper
+        .uploadFile(`uploaded/${fileName.replace('txt', 'csv')}`, csv);
     })
     .then(() => {
       return createDetails
@@ -77,8 +88,17 @@ const sortEntriesByValues = function(arr) {
   return new Map([...occ.entries()].sort((a, b) => b[1] - a[1]));
 };
 
+const mapToCsv = function(map) {
+  let text = '';
+  map.forEach((v,k,m) => {
+    text += `${k},${v}\n`;
+  });
+  return text;
+};
+
 module.exports.handler = handler;
 module.exports.detectKeyPhrases = detectKeyPhrases;
 module.exports.detectSentiment = detectSentiment;
+module.exports.mapToCsv = mapToCsv;
 module.exports.sortEntriesByValues = sortEntriesByValues;
 module.exports.synthesizeSpeech = synthesizeSpeech;
