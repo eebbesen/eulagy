@@ -17,16 +17,9 @@ And (shhhh, don't tell) EULAgy will work for _any_ text file, not just EULAs :).
 
 ## Using
 ### AWS Lambda
-See Deploy below.
+See Deploy below. Place txt files in the root S3 bucket -- output will appear in the `uploaded` folder of the S3 bucket.
 
 ### Command Line
-#### Convert text to mp3
-Using the `EULAS.CONTENT` field, create mp3 files.
-```bash
-node lib/db_to_mp3.js
-```
-and mp3s for all content in the EULA table will be placed in the `output` directory.
-
 #### Upload files to S3
 Will upload all files from `output` to S3 bucket named `eulagy`. DOES NOT check for duplicates, so move records from `output` to `uploaded` once they are uploaded.
 ```bash
