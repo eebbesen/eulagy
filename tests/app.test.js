@@ -35,7 +35,7 @@ test('detects sentiment of facebook', () => {
       return app.detectSentiment(chunks[0]);
     })
     .then((sentiment) => {
-      console.log('FACEBOOK', sentiment);
+      // console.log('FACEBOOK', sentiment);
       expect(sentiment.Sentiment).toEqual('NEUTRAL');
     });
 });
@@ -48,7 +48,7 @@ test('detects sentiment of tumblr', () => {
       return app.detectSentiment(chunks[0]);
     })
     .then((sentiment) => {
-      console.log('TUMBLR', sentiment);
+      // console.log('TUMBLR', sentiment);
       expect(sentiment.Sentiment).toEqual('NEUTRAL');
     });
 });
@@ -64,3 +64,37 @@ test('detects key phrases in facebook eula', () => {
       expect(keyPhrases.KeyPhrases.length).toBeGreaterThan(10);
     });
 });
+
+test('sorts key phrases by count descending', () => {
+  const kp = [ { Score: 0.9989810585975647,
+        Text: 'Our Statement',
+        BeginOffset: 0,
+        EndOffset: 13 },
+      { Score: 0.9646416306495667,
+        Text: 'Rights and Responsibilities',
+        BeginOffset: 17,
+        EndOffset: 44 },
+      { Score: 0.9958744049072266,
+        Text: 'our STATEMENT',
+        BeginOffset: 60,
+        EndOffset: 69 },
+      { Score: 0.9955416321754456,
+        Text: 'Service',
+        BeginOffset: 73,
+        EndOffset: 80 },
+      { Score: 0.9994470477104187,
+        Text: 'our previous Statement',
+        BeginOffset: 95,
+        EndOffset: 117 } ];
+
+  const sorted = app.sortEntriesByValues(kp);
+
+  expect(sorted.size).toBe(4);
+  expect(sorted.get('our statement')).toBe(2);
+  expect(sorted.get('rights and responsibilities')).toBe(1);
+  expect(sorted.get('service')).toBe(1);
+  expect(sorted.get('our previous statement')).toBe(1);
+});
+
+// find word(s) that appear very seldom to flag unusual clauses...
+
