@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/project
     docker:
-      - image: circleci/node:8-stretch-browsers-legacy
+      - image: circleci/node:11.11.0
     steps:
       - checkout
       - run:
