@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/eebbesen/eulagy.svg?style=svg)](https://circleci.com/gh/eebbesen/eulagy)
+
 # EULAgy
 Get a EULA read to you.
 

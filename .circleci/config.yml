@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/project
+    docker:
+      - image: circleci/node:11.11.0
+    steps:
+      - checkout
+      - run:
+          name: install_npm
+          command: sudo npm install -g npm
+      - run:
+          name: npm_install_packages
+          command: npm install
+      - run:
+          name: run_tests
+          command: npm run test
+
