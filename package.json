@@ -16,6 +16,10 @@
   "dependencies": {
     "aws-sdk": "^2.348.0",
     "fs": "0.0.1-security",
+    "npm": "^6.12.0",
     "pg": "^7.6.0"
+  },
+  "engines": {
+    "node": ">=12.13.1"
   }
 }
