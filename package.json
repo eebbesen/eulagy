@@ -11,13 +11,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^25.0.0"
+    "jest": "^25.5.4"
   },
   "dependencies": {
-    "aws-sdk": "^2.348.0",
+    "aws-sdk": "^2.747.0",
     "fs": "0.0.1-security",
     "npm": "^6.14.6",
-    "pg": "^7.6.0"
+    "pg": "^7.18.2"
   },
   "engines": {
     "node": ">=12.13.1"
