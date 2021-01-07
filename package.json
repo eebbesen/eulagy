@@ -1,6 +1,6 @@
 {
   "name": "eulagy",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Read EULAs to you",
   "repository": "eebbesen/eulagy",
   "main": "app.js",
@@ -16,7 +16,8 @@
   "dependencies": {
     "aws-sdk": "^2.747.0",
     "fs": "0.0.1-security",
-    "npm": "^6.14.6",
+    "node-notifier": ">=8.0.1",
+    "npm": "^7.3.0",
     "pg": "^7.18.2"
   },
   "engines": {
