@@ -1,13 +1,13 @@
 version: 2.1
-  orbs:
-    node: circleci/node@5.0.2
-  jobs:
-    build:
-      executor: node/default
-      steps:
-        - checkout
-        - node/install-packages:
-          pkg-manager: npm
-        - run:
-            command: npm run test
-            name: Run tests
+orbs:
+  node: circleci/node@5.0.2
+jobs:
+  test:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+        pkg-manager: npm
+      - run:
+          command: npm run test
+          name: Run tests
