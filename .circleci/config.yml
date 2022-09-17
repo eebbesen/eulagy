@@ -1,18 +1,13 @@
-version: 2
-jobs:
-  build:
-    working_directory: ~/project
-    docker:
-      - image: cimg/node:14.19
-    steps:
-      - checkout
-      - run:
-          name: install_npm
-          command: sudo npm install -g npm
-      - run:
-          name: npm_install_packages
-          command: npm install
-      - run:
-          name: run_tests
-          command: npm run test
-
+version: 2.1
+  orbs:
+    node: circleci/node@5.0.2
+  jobs:
+    build:
+      executor: node/default
+      steps:
+        - checkout
+        - node/install-packages:
+          pkg-manager: npm
+        - run:
+            command: npm run test
+            name: Run tests
