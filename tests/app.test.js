@@ -20,7 +20,12 @@ test('handler creates mp3', () => {
     })
     .then(() => {
       return app.handler(event);
+    })
+    .then((ret) => {
+      expect(ret.$metadata.httpStatusCode).toEqual(200);
+      console.log('COMPLETE')
     });
+
 }, 700000);
 
 test('detects sentiment of facebook', () => {
