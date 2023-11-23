@@ -1,11 +1,13 @@
 'use strict'
 
-const AWS = require('aws-sdk');
-const Comprehend = new AWS.Comprehend({
+const { ComprehendClient, DetectSentimentCommand, DetectKeyPhrasesCommand } = require("@aws-sdk/client-comprehend");
+const { PollyClient, SynthesizeSpeechCommand } = require("@aws-sdk/client-polly");
+
+const comprehendClient = new ComprehendClient({
   apiVersion: '2017-11-27',
   region: 'us-east-1'
 });
-const Polly = new AWS.Polly({
+const pollyClient = new PollyClient({
   signatureVersion: 'v4',
   region: 'us-east-1'
 });
@@ -43,6 +45,10 @@ const handler = function(event) {
     })
     .then(() => {
       const chunks = text.match(/[\s\S]{1,4900}/g);
+      const input = {
+        Text: chunks,
+        LanguageCode: "en"
+      };
       return detectKeyPhrases(chunks[0]);
     })
     .then(kp => {
@@ -59,11 +65,12 @@ const handler = function(event) {
 // returns a promise to create an mp3 from text
 const synthesizeSpeech = function(text) {
   const params = {
-    'Text': text,
-    'OutputFormat': 'mp3',
-    'VoiceId': 'Kimberly'
+    OutputFormat: 'mp3',
+    Text: text,
+    VoiceId: 'Kimberly'
   };
-  return Polly.synthesizeSpeech(params).promise();
+  const command = new SynthesizeSpeechCommand(params);
+  return pollyClient.send(command);
 };
 
 const detectSentiment = function(text) {
@@ -71,7 +78,8 @@ const detectSentiment = function(text) {
     LanguageCode: 'en',
     Text: text
   };
-  return Comprehend.detectSentiment(params).promise();
+  const command = new DetectSentimentCommand(params);
+  return comprehendClient.send(command);
 };
 
 const detectKeyPhrases = function(text) {
@@ -79,7 +87,8 @@ const detectKeyPhrases = function(text) {
     LanguageCode: 'en',
     Text: text
   };
-  return Comprehend.detectKeyPhrases(params).promise();
+  const command = new DetectKeyPhrasesCommand(params);
+  return comprehendClient.send(command);
 };
 
 // count and sort map by count of key (lower case)
