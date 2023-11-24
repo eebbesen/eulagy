@@ -23,7 +23,6 @@ test('handler creates mp3', () => {
     })
     .then((ret) => {
       expect(ret.$metadata.httpStatusCode).toEqual(200);
-      console.log('COMPLETE')
     });
 
 }, 700000);

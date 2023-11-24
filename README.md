@@ -59,10 +59,10 @@ See Deploy below. Place txt files in the root S3 bucket -- output will appear in
 ----
 ## Helper functions
 ### S3
-#### Create bucket
+#### Create bucket named eulagy
 Bucket name defaults to `eulagy`. Will not create a bucket that already exists.
 ```bash
-node lib/buckets create [name]
+node lib/buckets createb [name]
 ```
 
 #### List buckets
