@@ -25,6 +25,8 @@ See Deploy below. Place txt files in the root S3 bucket -- output will appear in
 1. [Install npm](https://www.npmjs.com/get-npm)
 1. `npm install`
 1. `npm test` to validate setup! (You'll need to have AWS credentials created, e.g., https://docs.aws.amazon.com/sdkref/latest/guide/file-format.html)
+1. `npm run live_test` to run a test that actually hits S3
+    * requires configured AWS CLI setup on box running tests
 
 ## Deploy
 ### S3 bucket
