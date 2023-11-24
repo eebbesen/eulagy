@@ -5,18 +5,19 @@
   "repository": "eebbesen/eulagy",
   "main": "app.js",
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles tests/app.test.js",
+    "live_test": "jest --detectOpenHandles tests/live.test.js",
     "zpack": "rm -rf node_modules/*; npm install --only=production; VER=`grep version package.json | perl -nle 'print $& if m{\\d.\\d.\\d}'`;zip -r builds/eulagy-$VER.zip app.js package.json db lib node_modules; npm install"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@aws-sdk/client-comprehend": "^3.454.0",
-    "@aws-sdk/client-polly": "^3.454.0",
     "jest": "^29.7.0"
   },
   "dependencies": {
-    "aws-sdk": ">=2.1218.0",
+    "@aws-sdk/client-comprehend": "^3.454.0",
+    "@aws-sdk/client-polly": "^3.454.0",
+    "@aws-sdk/client-s3": "^3.454.0",
     "fs": ">=0.0.1-security",
     "json-schema": ">=0.4.0",
     "node-notifier": ">=10.0.1",
