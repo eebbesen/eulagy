@@ -1,18 +1,21 @@
 {
   "name": "eulagy",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "description": "Read EULAs to you",
   "repository": "eebbesen/eulagy",
   "main": "app.js",
   "scripts": {
-    "test": "jest --detectOpenHandles tests/app.test.js",
-    "live_test": "jest --detectOpenHandles tests/live.test.js",
+    "test": "jest --detectOpenHandles tests/app.test.ts",
+    "live_test": "jest --detectOpenHandles tests/live.test.ts",
     "zpack": "rm -rf node_modules/*; npm install --only=production; VER=`grep version package.json | perl -nle 'print $& if m{\\d.\\d.\\d}'`;zip -r builds/eulagy-$VER.zip app.js package.json db lib node_modules; npm install"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "@types/jest": "^29.5.10",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.2"
   },
   "dependencies": {
     "@aws-sdk/client-comprehend": "^3.454.0",

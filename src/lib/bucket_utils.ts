@@ -9,7 +9,6 @@ const { S3Client,
         ListObjectsCommand, 
         PutObjectCommand } = require("@aws-sdk/client-s3");
 const client = new S3Client({});
-const fsPromises = require('fs').promises;
 
 // Call S3 to list current buckets
 const listBuckets = function() {

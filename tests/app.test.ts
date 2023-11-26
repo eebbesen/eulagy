@@ -1,6 +1,5 @@
-const app = require('../app');
+const app = require('../src/app');
 const fsPromises = require('fs').promises;
-const s3Helper = require('../lib/bucket_utils');
 
 test('detects sentiment of facebook', () => {
   return fsPromises.readFile('eulas/facebook/04.19.2018.txt')
@@ -62,13 +61,13 @@ test('sorts key phrases by count descending', () => {
         BeginOffset: 95,
         EndOffset: 117 } ];
 
-  const sorted = app.sortEntriesByValues(kp);
-
-  expect(sorted.size).toBe(4);
-  expect(sorted.get('our statement')).toBe(2);
-  expect(sorted.get('rights and responsibilities')).toBe(1);
-  expect(sorted.get('service')).toBe(1);
-  expect(sorted.get('our previous statement')).toBe(1);
+  return app.sortEntriesByValues(kp).then(sorted => {
+    expect(sorted.size).toBe(4);
+    expect(sorted.get('our statement')).toBe(2);
+    expect(sorted.get('rights and responsibilities')).toBe(1);
+    expect(sorted.get('service')).toBe(1);
+    expect(sorted.get('our previous statement')).toBe(1);
+  })
 });
 
 test('Map to csv', () => {
@@ -101,3 +100,5 @@ test('Map to csv', () => {
 });
 
 // find word(s) that appear very seldom to flag unusual clauses...
+
+export {};
