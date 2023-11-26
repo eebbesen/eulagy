@@ -1,113 +1,51 @@
-'use strict'
 
-const { ComprehendClient, DetectSentimentCommand, DetectKeyPhrasesCommand } = require("@aws-sdk/client-comprehend");
-const { PollyClient, SynthesizeSpeechCommand } = require("@aws-sdk/client-polly");
+import * as BucketUtils from './bucket_utils';
+import * as Utils from './utils';
+import * as PollyUtils from './pollyUtils';
+import * as ComprehendUtils from './comprehendUtils';
+import { GetObjectCommandOutput } from '@aws-sdk/client-s3';
+import { SynthesizeSpeechOutput } from '@aws-sdk/client-polly';
 
-const comprehendClient = new ComprehendClient({
-  apiVersion: '2017-11-27',
-  region: 'us-east-1'
-});
-const pollyClient = new PollyClient({
-  signatureVersion: 'v4',
-  region: 'us-east-1'
-});
-const s3Helper = require('./lib/bucket_utils');
+export function handler(event: any) {
+  const rec: any = event.Records[0];
+  const fileName: string = rec.s3.object.key;
 
+  let text: string | undefined;
+  let createDetailsMp3: string;
+  let createDetailsCsv: string;
 
-const handler = function(event) {
-  const rec = event.Records[0];
-  const fileName = rec.s3.object.key;
-
-  let text;
-  let createDetails;
-
-  return s3Helper.downloadFile(fileName)
-    .then(data => {
-      return data.Body.toString();
+  return BucketUtils.downloadFile(fileName)
+    .then((data: GetObjectCommandOutput) => {
+      return data?.Body?.toString();
     })
-    .then((eulaText) => {
+    .then((eulaText: string | undefined) => {
       text = eulaText;
-      const chunks = eulaText.match(/[\s\S]{1,2999}/g)
-      return synthesizeSpeech(chunks[0]);
+      // raise Exception unless eulaText has value
+      // const chunks: RegExpMatchArray | null | undefined = eulaText?.match(/[\s\S]{1,2999}/g)
+      const chunks: any = eulaText?.match(/[\s\S]{1,2999}/g)
+      return PollyUtils.synthesizeSpeech(chunks);
     })
-    .then(mp3 => {
-      return s3Helper
-        .uploadFile(`uploaded/${fileName.replace('txt', 'mp3')}`, mp3.AudioStream);
+    .then((mp3: SynthesizeSpeechOutput | null) => {
+      return BucketUtils
+        .uploadFile(`uploaded/${fileName.replace('txt', 'mp3')}`, mp3?.AudioStream);
     })
-    .then(cd => {
-      createDetails = cd;
-      try {
-        s3Helper
-          .deleteFile(fileName);
-      } catch (err) {
-        console.log(`EULAGY:: Issue deleting ${fileName}`);
-      }
-    })
-    .then(() => {
-      const chunks = text.match(/[\s\S]{1,4900}/g);
-      const input = {
-        Text: chunks,
-        LanguageCode: "en"
-      };
-      return detectKeyPhrases(chunks[0]);
-    })
-    .then(kp => {
-      const vals = sortEntriesByValues(kp.KeyPhrases);
-      const csv = mapToCsv(vals);
-      return s3Helper
-        .uploadFile(`uploaded/${fileName.replace('txt', 'csv')}`, csv);
-    })
-    .then(() => {
-      return createDetails
+    // .then((ret: any) => {
+    //   const chunks: RegExpMatchArray | null | undefined = text?.match(/[\s\S]{1,4900}/g);
+    //   // raise error if chunks has no value
+    //   return ComprehendUtils.detectKeyPhrases(chunks);
+    // })
+    // .then((kp: any) => {
+    //   // this is the issue, it does not upload
+    //   const vals = Utils.sortEntriesByValues(kp?.KeyPhrases);
+    //   const csv = Utils.mapToCsv(vals);
+    //   // return BucketUtils
+    //   //   .uploadFile(`uploaded/${fileName.replace('txt', 'csv')}`, csv);
+    // })
+    // .then((cd: any) => {
+    //   createDetailsMp3 = cd;
+    //   return BucketUtils.deleteFile(fileName);
+    // })
+    .then((cdMp3: any) => {
+      return cdMp3;
     });
 };
-
-// returns a promise to create an mp3 from text
-const synthesizeSpeech = function(text) {
-  const params = {
-    OutputFormat: 'mp3',
-    Text: text,
-    VoiceId: 'Kimberly'
-  };
-  const command = new SynthesizeSpeechCommand(params);
-  return pollyClient.send(command);
-};
-
-const detectSentiment = function(text) {
-  const params = {
-    LanguageCode: 'en',
-    Text: text
-  };
-  const command = new DetectSentimentCommand(params);
-  return comprehendClient.send(command);
-};
-
-const detectKeyPhrases = function(text) {
-  const params = {
-    LanguageCode: 'en',
-    Text: text
-  };
-  const command = new DetectKeyPhrasesCommand(params);
-  return comprehendClient.send(command);
-};
-
-// count and sort map by count of key (lower case)
-const sortEntriesByValues = function(arr) {
-  const occ = arr.reduce((occ, val) => occ.set(val.Text.toLowerCase(), 1 + (occ.get(val.Text.toLowerCase()) || 0)), new Map());
-  return new Map([...occ.entries()].sort((a, b) => b[1] - a[1]));
-};
-
-const mapToCsv = function(map) {
-  let text = '';
-  map.forEach((v,k,m) => {
-    text += `${k},${v}\n`;
-  });
-  return text;
-};
-
-module.exports.handler = handler;
-module.exports.detectKeyPhrases = detectKeyPhrases;
-module.exports.detectSentiment = detectSentiment;
-module.exports.mapToCsv = mapToCsv;
-module.exports.sortEntriesByValues = sortEntriesByValues;
-module.exports.synthesizeSpeech = synthesizeSpeech;
