@@ -1,27 +1,29 @@
-'use strict'
+import { S3Client,
+        CreateBucketCommand,
+        DeleteObjectCommand,
+        DeleteObjectCommandOutput,
+        GetObjectCommand,
+        GetObjectCommandOutput,
+        ListBucketsCommand,
+        ListBucketsCommandOutput,
+        ListObjectsCommand,
+        ListObjectsCommandOutput,
+        PutObjectCommand,
+        PutObjectCommandOutput } from '@aws-sdk/client-s3';
+import FsPromises from 'fs/promises';
 
-// mostly from https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-creating-buckets.html
-const { S3Client, 
-        CreateBucketCommand, 
-        DeleteObjectCommand, 
-        GetObjectCommand, 
-        ListBucketsCommand, 
-        ListObjectsCommand, 
-        PutObjectCommand } = require("@aws-sdk/client-s3");
 const client = new S3Client({});
-const fsPromises = require('fs').promises;
 
-// Call S3 to list current buckets
-const listBuckets = function() {
+export function listBuckets(): Promise<ListBucketsCommandOutput>  {
   return client.send(new ListBucketsCommand({}));
 };
 
-const createBucket = function(name) {
+export function createBucket(name: string): void {
   const bucketName = name || 'eulagy';
 
   listBuckets()
     .then(bs => {
-      bs['Buckets'].forEach( b => {
+      bs['Buckets']?.forEach( b => {
         if(b['Name'] === bucketName) {
           console.log(`${bucketName} already exists!`);
           return true;
@@ -34,50 +36,48 @@ const createBucket = function(name) {
       const createBucketCommand = new CreateBucketCommand({ Bucket: bucketName });
 
       client.send(createBucketCommand);
+    })
+    .catch((error: any) => {
+      console.log(error);
     });
 };
 
 // lists files in S3 bucket
-const listBucketFiles = function(name) {
+export function listBucketFiles(name: string): Promise<ListObjectsCommandOutput> {
   const bucketName = name || 'eulagy';
   const listObjectsCommand = new ListObjectsCommand({ Bucket: bucketName });
   return client.send(listObjectsCommand);
 };
 
-function downloadFile(name) {
+export function downloadFile(name: string): Promise<GetObjectCommandOutput> {
   const getObjectCommand = new GetObjectCommand({ Bucket: 'eulagy', Key: name });
   return client.send(getObjectCommand);
 }
 
-function deleteFile(name) {
+export function deleteFile(name: string): Promise<DeleteObjectCommandOutput> {
   const deleteObjectCommand = new DeleteObjectCommand({ Bucket: 'eulagy', Key: name });
   return client.send(deleteObjectCommand);
 };
 
 // uploads one file to S3 bucket
-const uploadFile = function(name, data) {
+export function uploadFile(name: string, data: any): Promise<PutObjectCommandOutput> {
   const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.readableLength });
   return client.send(putObjectCommand);
 }
 
 // uploads all files in a dir to S3 bucket
-const uploadFiles = function() {
-  return fsPromises.readdir('output')
-    .then((files, err) => {
-      files.forEach(f => {
-        fsPromises.readFile(`output/${f}`)
-          .then((buffer, err) => {
+export function uploadFiles(): Promise<void | string[]> {
+  return FsPromises.readdir('output')
+    .then((files: any) => {
+      files.forEach((f: any) => {
+        FsPromises.readFile(`output/${f}`)
+          .then((buffer: Buffer) => {
             uploadFile(f, buffer)
               .then(() => { console.log(`Uploaded ${f}`); });
         });
+      })
+      .catch((error: any) => {
+        console.log(error);
       });
     });
 };
-
-module.exports.createBucket = createBucket;
-module.exports.deleteFile = deleteFile;
-module.exports.downloadFile = downloadFile;
-module.exports.listBuckets = listBuckets;
-module.exports.listBucketFiles = listBucketFiles;
-module.exports.uploadFile = uploadFile;
-module.exports.uploadFiles = uploadFiles;
