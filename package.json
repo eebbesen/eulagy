@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest safe",
     "liveTest": "jest",
-    "zpack": "tsc; ./scripts/package.sh"
+    "zpack_x": "bash ./scripts/package.sh;"
   },
   "keywords": [],
   "author": "eebbesen",

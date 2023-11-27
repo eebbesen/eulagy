@@ -65,7 +65,7 @@ The application is small enough and the tests are inexpensive enough for it to b
 ### Lambda
 1. Create a new Lambda function with the role you created
 1. Give the function a Timeout of 10 seconds
-1. Run `npm run zpack` to create the artifact (a zip file) in the `build` directory
+1. Run `tsc`, then `npm run zpack_x` to create the artifact (a zip file) in the `build` directory. On Windows and WSL you may need to execute the script steps manually.
 1. Upload the artifact to your Lambda function in AWS
 
 
