@@ -23,7 +23,7 @@ describe('end-to-end test', () => {
         return App.handler(event);
       })
       .then((ret: any) => {
-        console.log(`RETURN: ${ret}`);
+        console.log('RETURN:', JSON.stringify(ret));
         expect(ret?.$metadata?.httpStatusCode).toEqual(200);
       });
     }, 70000);

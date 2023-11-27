@@ -12,7 +12,7 @@ describe('detectSentiment', () => {
         return ComprehendUtils.detectSentiment(chunks);
       })
       .then((sentiment: any) => {
-        // console.log('FACEBOOK', sentiment);
+        console.log('FACEBOOK', sentiment);
         expect(sentiment.Sentiment).toEqual('NEUTRAL');
       })
     });
@@ -25,7 +25,7 @@ describe('detectSentiment', () => {
         return ComprehendUtils.detectSentiment(chunks);
       })
       .then((sentiment: any | null) => {
-        // console.log('TUMBLR', sentiment);
+        console.log('TUMBLR', sentiment);
         expect(sentiment.Sentiment).toEqual('NEUTRAL');
       })
   });

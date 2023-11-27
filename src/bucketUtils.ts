@@ -50,7 +50,7 @@ export function listBucketFiles(name: string): Promise<ListObjectsCommandOutput>
 };
 
 export function downloadFile(name: string): Promise<GetObjectCommandOutput> {
-  const getObjectCommand = new GetObjectCommand({ Bucket: 'eulagy', Key: name });
+  const getObjectCommand = new GetObjectCommand({ Bucket: 'eulagy', Key: name, RequestPayer: 'requester' });
   return client.send(getObjectCommand);
 }
 
@@ -61,6 +61,7 @@ export function deleteFile(name: string): Promise<DeleteObjectCommandOutput> {
 
 // uploads one file to S3 bucket
 export function uploadFile(name: string, data: any): Promise<PutObjectCommandOutput> {
+  console.log(`${name} size is ${data.readableLength}`);
   const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.readableLength });
   return client.send(putObjectCommand);
 }
