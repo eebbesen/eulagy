@@ -1,10 +1,10 @@
-import { ComprehendClient,
-         DetectKeyPhrasesCommand,
-         DetectKeyPhrasesCommandOutput,
-         DetectSentimentCommand,
-         DetectSentimentCommandOutput } from '@aws-sdk/client-comprehend';
-
-
+import {
+  ComprehendClient,
+  DetectKeyPhrasesCommand,
+  DetectKeyPhrasesCommandOutput,
+  DetectSentimentCommand,
+  DetectSentimentCommandOutput
+} from '@aws-sdk/client-comprehend';
 
 const comprehendClient = new ComprehendClient({});
 

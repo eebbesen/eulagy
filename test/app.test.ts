@@ -1,6 +1,9 @@
 import * as App from '../src/app';
 import * as FsPromises from 'fs/promises';
 import * as S3Helper from '../src/bucketUtils';
+import { log4TSProvider } from "../src/config/LogConfig";
+
+const log = log4TSProvider.getLogger("AppTest");
 
 // live test, requires file humegatech-11.05.2018.txt in eulagy root in S3 so we upload it
 describe('end-to-end test', () => {
@@ -24,7 +27,7 @@ describe('end-to-end test', () => {
         return App.handler(event);
       })
       .then((ret: any) => {
-        console.log('RETURN:', JSON.stringify(ret));
+        log.debug('end-to-end result', JSON.stringify(ret));
         expect(ret?.$metadata?.httpStatusCode).toEqual(200);
       });
   });

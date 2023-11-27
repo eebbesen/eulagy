@@ -4,6 +4,9 @@ import {
 } from '@aws-sdk/client-comprehend';
 import * as ComprehendUtils from '../src/comprehendUtils';
 import FsPromises from 'fs/promises';
+import { log4TSProvider } from "../src/config/LogConfig";
+
+const log = log4TSProvider.getLogger("ComprehendUtilsTest");
 
 describe('detectSentiment', () => {
   it('detects sentiment of facebook', () => {
@@ -14,7 +17,7 @@ describe('detectSentiment', () => {
         return ComprehendUtils.detectSentiment(chunks);
       })
       .then((sentiment: any) => {
-        console.log('FACEBOOK', sentiment);
+        log.debug('Facebook sentiment', sentiment);
         expect(sentiment.Sentiment).toEqual('NEUTRAL');
       })
   });
@@ -27,7 +30,7 @@ describe('detectSentiment', () => {
         return ComprehendUtils.detectSentiment(chunks);
       })
       .then((sentiment: any | null) => {
-        console.log('TUMBLR', sentiment);
+        log.debug('Tumblr sentiment', sentiment);
         expect(sentiment.Sentiment).toEqual('NEUTRAL');
       })
   });
@@ -47,4 +50,4 @@ describe('keyPhrases', () => {
   });
 });
 
-// find word(s) that appear very seldom to flag unusual clauses...
+// todo find word(s) that appear very seldom to flag unusual clauses...

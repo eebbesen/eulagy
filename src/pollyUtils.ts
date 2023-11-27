@@ -1,8 +1,10 @@
-import { PollyClient,
-         SynthesizeSpeechCommand,
-         SynthesizeSpeechCommandOutput,
-         StartSpeechSynthesisTaskCommand,
-         StartSpeechSynthesisTaskCommandOutput } from '@aws-sdk/client-polly';
+import {
+  PollyClient,
+  SynthesizeSpeechCommand,
+  SynthesizeSpeechCommandOutput,
+  StartSpeechSynthesisTaskCommand,
+  StartSpeechSynthesisTaskCommandOutput
+} from '@aws-sdk/client-polly';
 
 const pollyClient = new PollyClient({});
 
@@ -20,7 +22,7 @@ const pollyClient = new PollyClient({});
 // };
 
 // uploads directly to S3 bucket
-export function startSynthesizeSpeech(text: RegExpMatchArray | null ): Promise<StartSpeechSynthesisTaskCommandOutput> | null {
+export function startSynthesizeSpeech(text: RegExpMatchArray | null): Promise<StartSpeechSynthesisTaskCommandOutput> | null {
   if (!text) {
     return null;
   }
