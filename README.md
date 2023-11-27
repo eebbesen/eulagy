@@ -16,6 +16,8 @@ And (shhhh, don't tell) EULAgy will work for _any_ text file, not just EULAs :).
 * EULAgy uses Amazon Comprehend to create a csv from EULA text
 * EULAgy is designed to work on AWS Lambda, but can also be run from the command line
 
+*NOTE: EULAgy is an MVP and work to make it more flexible are in progress.*
+*In particular, code changes are required to remove hard-coded `eulagy` bucket name throughout the application!*
 
 ## Using
 ### AWS Lambda
@@ -24,14 +26,23 @@ See Deploy below. Place txt files in the root S3 bucket -- output will appear in
 ## Develop
 1. [Install npm](https://www.npmjs.com/get-npm)
 1. `npm install`
-1. `npm test` to validate setup! (You'll need to have AWS credentials created, e.g., https://docs.aws.amazon.com/sdkref/latest/guide/file-format.html)
-1. `npm run live_test` to run a test that actually hits S3
-    * requires configured AWS CLI setup on box running tests
+1. `npm test` to validate setup! 
+1. `npm run liveTest` to run tests that actually hit S3
+    * requires configured AWS CLI setup on box running tests -- (You'll need to have AWS credentials created, e.g., https://docs.aws.amazon.com/sdkref/latest/guide/file-format.html)
+    * will incur AWS charges (up to several cents per full suite run in the cheapest AWS region)
+
+### More on testing
+* Comprehend usage in the suite comprises over 98% of the cost and is executed from comprehendUtils.test.ts and app.test.ts
+* app.test.ts executes the entire processing chain
+* See the `coverage` directory for code coverage numbers after the tests are run
+
+I chose to create "live" tests that hit AWS services instead of mocking.
+The application is small enough and the tests are inexpensive enough for it to be worth _not_ spending my time mocking and potentially retooling mocks if anything changes on the AWS side. The live tests give me greater confidence that a packaged release will work.
 
 ## Deploy
 ### S3 bucket
 1. Create a bucket in S3
-1. Create a folder named `uploaded` in the bucket
+1. Create a folder named `uploaded` in the bucket (see below for helper scripting)
 1. Create an AWS role with AWSLambdaExecute, AmazonPollyFullAccess, AmazonS3FullAccess and ComprehendFullAccess
 1. Add this policy to the bucket
 ```
@@ -49,7 +60,7 @@ See Deploy below. Place txt files in the root S3 bucket -- output will appear in
     ]
 }
 ```
-5. Replace bucket references in JavaScript code with your bucket name
+5. Replace bucket references in code with your bucket name (I'm working on making this configurable)
 
 ### Lambda
 1. Create a new Lambda function with the role you created
@@ -58,10 +69,8 @@ See Deploy below. Place txt files in the root S3 bucket -- output will appear in
 1. Upload the artifact to your Lambda function in AWS
 
 
-----
 ## Helper functions
-### S3
-#### Create bucket named eulagy
+### Create bucket named eulagy
 Bucket name defaults to `eulagy`. Will not create a bucket that already exists.
 ```bash
 node lib/buckets createb [name]
