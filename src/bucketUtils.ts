@@ -13,9 +13,9 @@ import {
   PutObjectCommandOutput
 } from '@aws-sdk/client-s3';
 import FsPromises from 'fs/promises';
-import { log4TSProvider } from "./config/LogConfig";
+import { log4TSProvider } from './config/LogConfig';
 
-const log = log4TSProvider.getLogger("BucketUtils");
+const log = log4TSProvider.getLogger('BucketUtils');
 const client = new S3Client({});
 
 export function listBuckets(): Promise<ListBucketsCommandOutput> {

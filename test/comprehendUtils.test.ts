@@ -1,8 +1,8 @@
 import * as ComprehendUtils from '../src/comprehendUtils';
 import FsPromises from 'fs/promises';
-import { log4TSProvider } from "../src/config/LogConfig";
+import { log4TSProvider } from '../src/config/LogConfig';
 
-const log = log4TSProvider.getLogger("ComprehendUtilsTest");
+const log = log4TSProvider.getLogger('ComprehendUtilsTest');
 
 function extractChunks(fileName: string): Promise<RegExpMatchArray | null> {
   return FsPromises.readFile(fileName)

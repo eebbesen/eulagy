@@ -1,8 +1,22 @@
 import * as S3Helper from '../src/bucketUtils';
 import * as FsPromises from 'fs/promises';
-import { log4TSProvider } from "../src/config/LogConfig";
+import {
+  ListBucketsCommand,
+  ListBucketsCommandOutput,
+} from '@aws-sdk/client-s3';
+import { log4TSProvider } from '../src/config/LogConfig';
 
-const log = log4TSProvider.getLogger("BucketUtilsTest");
+const log = log4TSProvider.getLogger('BucketUtilsTest');
+
+describe('listBuckets', () => {
+  // assumes you have buckets for your AWS credentials
+  it('lists buckets', () => {
+    return S3Helper.listBuckets()
+      .then((buckets: ListBucketsCommandOutput) => {
+        expect(buckets?.Buckets?.length).toBeGreaterThanOrEqual(1);
+      });
+  });
+});
 
 describe('uploadFile, listBucketFiles, downloadFile, and deleteFile', () => {
   it('uploads and deletes', () => {

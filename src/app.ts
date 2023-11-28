@@ -3,9 +3,9 @@ import * as Utils from './utils';
 import * as PollyUtils from './pollyUtils';
 import * as ComprehendUtils from './comprehendUtils';
 import { StartSpeechSynthesisTaskOutput } from '@aws-sdk/client-polly';
-import { log4TSProvider } from "./config/LogConfig";
+import { log4TSProvider } from './config/LogConfig';
 
-const log = log4TSProvider.getLogger("App");
+const log = log4TSProvider.getLogger('App');
 
 export function handler(event: any) {
   log.info('incoming event', JSON.stringify(event));

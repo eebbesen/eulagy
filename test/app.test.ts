@@ -1,9 +1,9 @@
 import * as App from '../src/app';
 import * as FsPromises from 'fs/promises';
 import * as S3Helper from '../src/bucketUtils';
-import { log4TSProvider } from "../src/config/LogConfig";
+import { log4TSProvider } from '../src/config/LogConfig';
 
-const log = log4TSProvider.getLogger("AppTest");
+const log = log4TSProvider.getLogger('AppTest');
 
 function createEvent(fileName: string): { Records: { s3: { object: { key: string; }; }; }[]; } {
   return {
