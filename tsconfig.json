@@ -10,13 +10,12 @@
     /* Type Checking */
     "strict": true, /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
     "sourceMap": true
   },
   "exclude": [
     "node_modules",
-    "test",
     "scripts"
   ]
 }

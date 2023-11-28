@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./distProd",
+  },
+  "extends": "./tsconfig",
+  "exclude": [
+    "test/"
+  ]
+}
