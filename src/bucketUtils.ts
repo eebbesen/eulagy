@@ -12,7 +12,6 @@ import {
   PutObjectCommand,
   type PutObjectCommandOutput
 } from '@aws-sdk/client-s3'
-import FsPromises from 'fs/promises'
 import { log4TSProvider } from './config/LogConfig'
 
 const log = log4TSProvider.getLogger('BucketUtils')
@@ -69,20 +68,3 @@ export async function uploadFile (name: string, data: any): Promise<PutObjectCom
   const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.readableLength })
   return await client.send(putObjectCommand)
 }
-
-// uploads all files in a dir to S3 bucket
-export async function uploadFiles (): Promise<string[] | void> {
-  return await FsPromises.readdir('output')
-    .then((files: any) => {
-      files.forEach((f: any) => {
-        FsPromises.readFile(`output/${f}`)
-          .then((buffer: Buffer) => {
-            uploadFile(f, buffer)
-              .then(() => { console.log(`Uploaded ${f}`) })
-          })
-      })
-        .catch((error: any) => {
-          log.error(error)
-        })
-    })
-};
