@@ -1,6 +1,6 @@
 {
   "name": "eulagy",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "EULAgy takes a text file, converts it to an mp3 and generates a csv based on the Amazon Comprehend findings",
   "main": "src/app.ts",
   "scripts": {
