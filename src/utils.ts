@@ -6,7 +6,7 @@ export function sortEntriesByValues(arr: any[]): Map<string, number> {
 
 export function mapToCsv(map: Map<string, number>): string {
   let text = '';
-  map.forEach((v,k,m) => {
+  map.forEach((v, k, m) => {
     text += `${k},${v}\n`;
   });
   return text;
