@@ -19,4 +19,10 @@ describe('startSynthesizeSpeech', () => {
         log.debug('Deleted as part of cleanup', JSON.stringify(ret));
       });
   });
+
+  it('throws error when no text', () => {
+    const chunks: any = 'bcd'.match(/[a]{1,2999}/g);
+    let errorThrown: any;
+    expect(() => PollyUtils.startSynthesizeSpeech(chunks)).toThrow('No text');
+  });
 });

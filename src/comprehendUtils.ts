@@ -10,7 +10,7 @@ const comprehendClient = new ComprehendClient({});
 
 export function detectSentiment(text: RegExpMatchArray | null): Promise<DetectSentimentCommandOutput> | null {
   if (!text) {
-    return null;
+    throw new Error('Empty text');
   }
   const command = new DetectSentimentCommand({
     LanguageCode: 'en',
@@ -21,7 +21,7 @@ export function detectSentiment(text: RegExpMatchArray | null): Promise<DetectSe
 
 export function detectKeyPhrases(text: RegExpMatchArray | null | undefined): Promise<DetectKeyPhrasesCommandOutput> | null {
   if (!text) {
-    return null;
+    throw new Error('Empty text');
   }
   const command = new DetectKeyPhrasesCommand({
     LanguageCode: 'en',
