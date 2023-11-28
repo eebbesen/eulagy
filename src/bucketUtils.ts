@@ -2,87 +2,87 @@ import {
   S3Client,
   CreateBucketCommand,
   DeleteObjectCommand,
-  DeleteObjectCommandOutput,
+  type DeleteObjectCommandOutput,
   GetObjectCommand,
-  GetObjectCommandOutput,
+  type GetObjectCommandOutput,
   ListBucketsCommand,
-  ListBucketsCommandOutput,
+  type ListBucketsCommandOutput,
   ListObjectsCommand,
-  ListObjectsCommandOutput,
+  type ListObjectsCommandOutput,
   PutObjectCommand,
-  PutObjectCommandOutput
-} from '@aws-sdk/client-s3';
-import FsPromises from 'fs/promises';
-import { log4TSProvider } from './config/LogConfig';
+  type PutObjectCommandOutput
+} from '@aws-sdk/client-s3'
+import FsPromises from 'fs/promises'
+import { log4TSProvider } from './config/LogConfig'
 
-const log = log4TSProvider.getLogger('BucketUtils');
-const client = new S3Client({});
+const log = log4TSProvider.getLogger('BucketUtils')
+const client = new S3Client({})
 
-export function listBuckets(): Promise<ListBucketsCommandOutput> {
-  return client.send(new ListBucketsCommand({}));
+export async function listBuckets (): Promise<ListBucketsCommandOutput> {
+  return await client.send(new ListBucketsCommand({}))
 };
 
-export function createBucket(name: string): void {
-  const bucketName = name || 'eulagy';
+export function createBucket (name: string): void {
+  const bucketName = (name.length > 0) ? name : 'eulagy'
 
   listBuckets()
     .then(bs => {
-      bs['Buckets']?.forEach(b => {
-        if (b['Name'] === bucketName) {
-          log.warn(`${bucketName} already exists!`);
-          return true;
+      bs.Buckets?.forEach(b => {
+        if (b.Name === bucketName) {
+          log.warn(`${bucketName} already exists!`)
+          return true
         }
-      });
+      })
 
-      log.info(`Will create ${bucketName}`);
+      log.info(`Will create ${bucketName}`)
     })
     .then(() => {
-      const createBucketCommand = new CreateBucketCommand({ Bucket: bucketName });
+      const createBucketCommand = new CreateBucketCommand({ Bucket: bucketName })
 
-      client.send(createBucketCommand);
+      client.send(createBucketCommand)
     })
     .catch((error: any) => {
-      log.error(error);
-    });
+      log.error(error)
+    })
 };
 
 // lists files in S3 bucket
-export function listBucketFiles(name: string): Promise<ListObjectsCommandOutput> {
-  const bucketName = name || 'eulagy';
-  const listObjectsCommand = new ListObjectsCommand({ Bucket: bucketName });
-  return client.send(listObjectsCommand);
+export async function listBucketFiles (name: string): Promise<ListObjectsCommandOutput> {
+  const bucketName = (name.length > 0) ? name : 'eulagy'
+  const listObjectsCommand = new ListObjectsCommand({ Bucket: bucketName })
+  return await client.send(listObjectsCommand)
 };
 
-export function downloadFile(name: string): Promise<GetObjectCommandOutput> {
-  const getObjectCommand = new GetObjectCommand({ Bucket: 'eulagy', Key: name, RequestPayer: 'requester' });
-  return client.send(getObjectCommand);
+export async function downloadFile (name: string): Promise<GetObjectCommandOutput> {
+  const getObjectCommand = new GetObjectCommand({ Bucket: 'eulagy', Key: name, RequestPayer: 'requester' })
+  return await client.send(getObjectCommand)
 }
 
-export function deleteFile(name: string): Promise<DeleteObjectCommandOutput> {
-  const deleteObjectCommand = new DeleteObjectCommand({ Bucket: 'eulagy', Key: name });
-  return client.send(deleteObjectCommand);
+export async function deleteFile (name: string): Promise<DeleteObjectCommandOutput> {
+  const deleteObjectCommand = new DeleteObjectCommand({ Bucket: 'eulagy', Key: name })
+  return await client.send(deleteObjectCommand)
 };
 
 // uploads one file to S3 bucket
-export function uploadFile(name: string, data: any): Promise<PutObjectCommandOutput> {
-  log.debug(`file ${name} size is ${data.readableLength}`);
-  const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.readableLength });
-  return client.send(putObjectCommand);
+export async function uploadFile (name: string, data: any): Promise<PutObjectCommandOutput> {
+  log.debug(`file ${name} size is ${data.readableLength}`)
+  const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.readableLength })
+  return await client.send(putObjectCommand)
 }
 
 // uploads all files in a dir to S3 bucket
-export function uploadFiles(): Promise<void | string[]> {
-  return FsPromises.readdir('output')
+export async function uploadFiles (): Promise<string[] | void> {
+  return await FsPromises.readdir('output')
     .then((files: any) => {
       files.forEach((f: any) => {
         FsPromises.readFile(`output/${f}`)
           .then((buffer: Buffer) => {
             uploadFile(f, buffer)
-              .then(() => { console.log(`Uploaded ${f}`); });
-          });
+              .then(() => { console.log(`Uploaded ${f}`) })
+          })
       })
         .catch((error: any) => {
-          log.error(error);
-        });
-    });
+          log.error(error)
+        })
+    })
 };
