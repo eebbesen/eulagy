@@ -35,10 +35,10 @@ export function createBucket (name: string): void {
 
       log.info(`Will create ${bucketName}`)
     })
-    .then(() => {
+    .then(async () => {
       const createBucketCommand = new CreateBucketCommand({ Bucket: bucketName })
 
-      client.send(createBucketCommand)
+      return await client.send(createBucketCommand)
     })
     .catch((error: any) => {
       log.error(error)
