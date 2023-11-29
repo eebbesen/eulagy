@@ -51,3 +51,23 @@ describe('mapToCsv', () => {
     expect(result.replace(/\n/g, '')).toEqual('our statement,2rights and responsibilities,1service,1our previous statement,1')
   })
 })
+
+describe('chunkText', () => {
+  it('returns the correct amount of text when limit is less than text length', () => {
+    const text: string = 'Hello, this is some test text'
+    const ret: RegExpMatchArray = Utils.chunkText(text, 10)
+    expect(ret[0]).toEqual('Hello, thi')
+    expect(ret.length).toEqual(3)
+  })
+
+  it('returns the correct amount of text when limit is more than text length', () => {
+    const text: string = 'Hello, this is some test text'
+    const ret: RegExpMatchArray = Utils.chunkText(text, 100)
+    expect(ret[0]).toEqual(text)
+    expect(ret.length).toEqual(1)
+  })
+
+  it('throws error when no return', () => {
+    expect(() => Utils.chunkText('', 1)).toThrow('No text extracted')
+  })
+})

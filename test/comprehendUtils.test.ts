@@ -4,7 +4,7 @@ import { log4TSProvider } from '../src/config/LogConfig'
 
 const log = log4TSProvider.getLogger('ComprehendUtilsTest')
 
-async function extractChunks (fileName: string): Promise<RegExpMatchArray | null> {
+async function extractChunks (fileName: string): Promise<RegExpMatchArray> {
   return await FsPromises.readFile(fileName)
     .then((buffer: Buffer) => {
       const text: string = buffer.toString()
@@ -16,7 +16,7 @@ async function extractChunks (fileName: string): Promise<RegExpMatchArray | null
 describe('detectSentiment', () => {
   it('detects sentiment of facebook', async () => {
     await extractChunks('eulas/facebook/04.19.2018.txt')
-      .then(async (chunks: RegExpMatchArray | null) => {
+      .then(async (chunks: RegExpMatchArray) => {
         return await ComprehendUtils.detectSentiment(chunks)
       })
       .then((sentiment: any) => {
@@ -27,10 +27,10 @@ describe('detectSentiment', () => {
 
   it('detects sentiment of tumblr', async () => {
     await extractChunks('eulas/tumblr/05.15.2018.txt')
-      .then(async (chunks: RegExpMatchArray | null) => {
+      .then(async (chunks: RegExpMatchArray) => {
         return await ComprehendUtils.detectSentiment(chunks)
       })
-      .then((sentiment: any | null) => {
+      .then((sentiment: any) => {
         log.debug('Tumblr sentiment', sentiment)
         expect(sentiment.Sentiment).toEqual('NEUTRAL')
       })
@@ -38,7 +38,7 @@ describe('detectSentiment', () => {
 
   it('throws error when no text', async () => {
     await extractChunks('test/files/empty.txt')
-      .then((chunks: RegExpMatchArray | null) => {
+      .then((chunks: RegExpMatchArray) => {
         void expect(async () => await ComprehendUtils.detectSentiment(chunks)).rejects.toThrow('Empty text')
       })
   })
@@ -47,7 +47,7 @@ describe('detectSentiment', () => {
 describe('keyPhrases', () => {
   it('detects key phrases in facebook eula', async () => {
     await extractChunks('eulas/facebook/04.19.2018.txt')
-      .then(async (chunks: RegExpMatchArray | null) => {
+      .then(async (chunks: RegExpMatchArray) => {
         return await ComprehendUtils.detectKeyPhrases(chunks)
       })
       .then((keyPhrases: any) => {
@@ -57,7 +57,7 @@ describe('keyPhrases', () => {
 
   it('throws error when no text', async () => {
     await extractChunks('test/files/empty.txt')
-      .then(async (chunks: RegExpMatchArray | null) => {
+      .then(async (chunks: RegExpMatchArray) => {
         void expect(async () => await ComprehendUtils.detectKeyPhrases(chunks)).rejects.toThrow('Empty text')
       })
   })

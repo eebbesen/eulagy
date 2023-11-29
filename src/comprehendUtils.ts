@@ -8,7 +8,7 @@ import {
 
 const comprehendClient = new ComprehendClient({})
 
-export async function detectSentiment (text: RegExpMatchArray | null): Promise<DetectSentimentCommandOutput> {
+export async function detectSentiment (text: RegExpMatchArray): Promise<DetectSentimentCommandOutput> {
   if (text == null) {
     throw new Error('Empty text in detectSentiment')
   }
@@ -19,7 +19,7 @@ export async function detectSentiment (text: RegExpMatchArray | null): Promise<D
   return await comprehendClient.send(command)
 };
 
-export async function detectKeyPhrases (text: RegExpMatchArray | null | undefined): Promise<DetectKeyPhrasesCommandOutput> {
+export async function detectKeyPhrases (text: RegExpMatchArray): Promise<DetectKeyPhrasesCommandOutput> {
   if (text == null) {
     throw new Error('Empty text in detectKeyPhrases')
   }

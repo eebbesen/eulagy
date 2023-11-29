@@ -22,3 +22,14 @@ export function mapToCsv (map: Map<string, number>): string {
   })
   return text
 };
+
+export function chunkText (text: string | undefined, limit: number): RegExpMatchArray {
+  const regexp: RegExp = new RegExp(`[\\s\\S]{1,${limit}}`, 'g')
+  const ret: RegExpMatchArray | null | undefined = text?.match(regexp)
+
+  if (ret == null || ret.length === 0 || ret === undefined) {
+    throw new Error('No text extracted')
+  }
+
+  return ret
+}

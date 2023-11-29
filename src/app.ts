@@ -14,8 +14,8 @@ export async function handler (event: any): Promise<any> {
   log.info('processing file', fileName)
 
   let text: string | undefined
-  let createDetailsMp3: any
-  let createDetailsCsv: any
+  let createDetailsMp3: object
+  let createDetailsCsv: object
 
   return await BucketUtils.downloadFile(fileName)
     .then((data: any) => {
@@ -28,16 +28,16 @@ export async function handler (event: any): Promise<any> {
       }
       text = eulaText
       // raise Exception unless eulaText has value
-      // const chunks: RegExpMatchArray | null | undefined = eulaText?.match(/[\s\S]{1,2999}/g)
-      const chunks: any = eulaText?.match(/[\s\S]{1,2999}/g)
+      // const chunks: RegExpMatchArray = eulaText?.match(/[\s\S]{1,2999}/g)
+      const chunks: RegExpMatchArray = Utils.chunkText(eulaText, 2999)
       return await PollyUtils.startSynthesizeSpeech(chunks)
     })
-    .then((mp3Generation: StartSpeechSynthesisTaskOutput | null) => {
+    .then((mp3Generation: StartSpeechSynthesisTaskOutput) => {
       createDetailsMp3 = mp3Generation
       log.debug('mp3 file location', JSON.stringify(mp3Generation))
     })
-    .then(async (ret: any) => {
-      const chunks: RegExpMatchArray | null | undefined = text?.match(/[\s\S]{1,4900}/g)
+    .then(async () => {
+      const chunks: RegExpMatchArray = Utils.chunkText(text, 4900)
       // raise error if chunks has no value
       return await ComprehendUtils.detectKeyPhrases(chunks)
     })
