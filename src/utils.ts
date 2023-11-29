@@ -3,8 +3,8 @@ import { type KeyPhrase } from '@aws-sdk/client-comprehend'
 export interface KeyPhraseMap { k: string, v: number }
 
 // count and sort map by count of key (lower case)
-export function sortEntriesByValues (arr: KeyPhrase[]): Map<string, number> {
-  const occ = arr.reduce((occ: any, val: KeyPhrase) => {
+export function sortEntriesByValues (arr: KeyPhrase[] | undefined): Map<string, number> {
+  const occ = arr?.reduce((occ: any, val: KeyPhrase) => {
     const slug: string | undefined = val?.Text?.toLowerCase()
     const k = slug?.toLowerCase() ?? 'undefined'
     const v: number = occ.get(k) ?? 0

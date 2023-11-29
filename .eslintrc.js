@@ -21,7 +21,10 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": "latest"
     },
-    "ignorePatterns": [".eslintrc.js"],
+    "ignorePatterns": [
+        ".eslintrc.js",
+        "src/lib/S3PutEvent.ts" /* Generated file from AWS */
+    ],
     "rules": {
         "semi": "off",
         "@typescript-eslint/semi": "warn"
