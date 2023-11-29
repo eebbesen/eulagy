@@ -22,8 +22,7 @@ module.exports = {
         "ecmaVersion": "latest"
     },
     "ignorePatterns": [
-        ".eslintrc.js",
-        "src/lib/S3PutEvent.ts" /* Generated file from AWS */
+        ".eslintrc.js"
     ],
     "rules": {
         "semi": "off",

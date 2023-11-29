@@ -40,8 +40,8 @@ export function createBucket (name: string): void {
 
       return await client.send(createBucketCommand)
     })
-    .catch((error: any) => {
-      log.error(error)
+    .catch((error: Error) => {
+      log.error(error.message)
     })
 };
 
@@ -63,8 +63,8 @@ export async function deleteFile (name: string): Promise<DeleteObjectCommandOutp
 };
 
 // uploads one file to S3 bucket
-export async function uploadFile (name: string, data: any): Promise<PutObjectCommandOutput> {
-  log.debug(`file ${name} size is ${data.readableLength}`)
-  const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.readableLength })
+export async function uploadFile (name: string, data: string): Promise<PutObjectCommandOutput> {
+  log.debug(`file ${name} size is ${data.length}`)
+  const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.length })
   return await client.send(putObjectCommand)
 }

@@ -17,7 +17,7 @@ describe('handler', () => {
     // using existing text with unique filename
     await FsPromises.readFile('test/files/humegatech-11.05.2018.txt.slug')
       .then(async (buffer: Buffer) => {
-        return await S3Helper.uploadFile(fileName, buffer)
+        return await S3Helper.uploadFile(fileName, buffer.toString())
       })
       .then(async () => {
         return await App.handler(event)
@@ -34,7 +34,7 @@ describe('handler', () => {
 
     await FsPromises.readFile('test/files/empty.txt')
       .then(async (buffer: Buffer) => {
-        return await S3Helper.uploadFile(fileName, buffer)
+        return await S3Helper.uploadFile(fileName, buffer.toLocaleString())
       })
       .then(async () => {
         await expect(App.handler(event)).rejects.toThrow(`No content for file ${fileName}`)

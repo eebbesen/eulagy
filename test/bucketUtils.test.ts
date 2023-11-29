@@ -1,5 +1,6 @@
 import * as S3Helper from '../src/bucketUtils'
 import * as FsPromises from 'fs/promises'
+
 import {
   type ListBucketsCommandOutput
 } from '@aws-sdk/client-s3'
@@ -23,7 +24,7 @@ describe('uploadFile, listBucketFiles, downloadFile, and deleteFile', () => {
 
     await FsPromises.readFile('test/files/humegatech-11.05.2018.txt.slug')
       .then(async (buffer: Buffer) => {
-        return await S3Helper.uploadFile(fileName, buffer)
+        return await S3Helper.uploadFile(fileName, buffer.toString())
       })
       .then(async (ret: any) => {
         log.debug('After upload', JSON.stringify(ret))
