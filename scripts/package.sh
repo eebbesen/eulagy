@@ -21,8 +21,10 @@ echo "release version will be ${VER}"
 PTH=`pwd`
 zip -r builds/eulagy-$VER.zip package.json node_modules 2>&1 1>/dev/null
 cd distProd/src
-zip builds/eulagy-$VER.zip ./**/*.js 2>&1 1>/dev/null
+zip ../../builds/eulagy-$VER.zip ./**/*.js 2>&1 1>/dev/null
+cd $PTH
 echo "release package builds/eulagy-${VER}.zip"
+
 
 echo 'npm install again to reset development'
 npm install
