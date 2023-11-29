@@ -1,31 +1,31 @@
 import {
   ComprehendClient,
   DetectKeyPhrasesCommand,
-  DetectKeyPhrasesCommandOutput,
+  type DetectKeyPhrasesCommandOutput,
   DetectSentimentCommand,
-  DetectSentimentCommandOutput
-} from '@aws-sdk/client-comprehend';
+  type DetectSentimentCommandOutput
+} from '@aws-sdk/client-comprehend'
 
-const comprehendClient = new ComprehendClient({});
+const comprehendClient = new ComprehendClient({})
 
-export function detectSentiment(text: RegExpMatchArray | null): Promise<DetectSentimentCommandOutput> | null {
-  if (!text) {
-    throw new Error('Empty text');
+export async function detectSentiment (text: RegExpMatchArray): Promise<DetectSentimentCommandOutput> {
+  if (text == null) {
+    throw new Error('Empty text in detectSentiment')
   }
   const command = new DetectSentimentCommand({
     LanguageCode: 'en',
-    Text: text![0]
-  });
-  return comprehendClient.send(command);
+    Text: text[0]
+  })
+  return await comprehendClient.send(command)
 };
 
-export function detectKeyPhrases(text: RegExpMatchArray | null | undefined): Promise<DetectKeyPhrasesCommandOutput> | null {
-  if (!text) {
-    throw new Error('Empty text');
+export async function detectKeyPhrases (text: RegExpMatchArray): Promise<DetectKeyPhrasesCommandOutput> {
+  if (text == null) {
+    throw new Error('Empty text in detectKeyPhrases')
   }
   const command = new DetectKeyPhrasesCommand({
     LanguageCode: 'en',
-    Text: text![0]
-  });
-  return comprehendClient.send(command);
+    Text: text[0]
+  })
+  return await comprehendClient.send(command)
 };
