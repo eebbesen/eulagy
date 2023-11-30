@@ -39,7 +39,7 @@ describe('detectSentiment', () => {
   it('throws error when no text', async () => {
     await extractChunks('test/files/empty.txt')
       .then((chunks: RegExpMatchArray) => {
-        expect(async () => await ComprehendUtils.detectSentiment(chunks)).rejects.toThrow('Empty text')
+        void expect(async () => await ComprehendUtils.detectSentiment(chunks)).rejects.toThrow('Empty text')
       })
   })
 })
@@ -58,7 +58,7 @@ describe('keyPhrases', () => {
   it('throws error when no text', async () => {
     await extractChunks('test/files/empty.txt')
       .then(async (chunks: RegExpMatchArray) => {
-        expect(async () => await ComprehendUtils.detectKeyPhrases(chunks)).rejects.toThrow('Empty text')
+        void expect(async () => await ComprehendUtils.detectKeyPhrases(chunks)).rejects.toThrow('Empty text')
       })
   })
 })

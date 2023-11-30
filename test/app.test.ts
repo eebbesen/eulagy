@@ -5,7 +5,7 @@ import * as Utils from '../src/utils'
 import { type S3Event } from 'aws-lambda'
 import { log4TSProvider } from '../src/config/LogConfig'
 import { type StartSpeechSynthesisTaskCommandOutput } from '@aws-sdk/client-polly'
-import { DeleteObjectCommandOutput } from '@aws-sdk/client-s3'
+import { type DeleteObjectCommandOutput } from '@aws-sdk/client-s3'
 
 const log = log4TSProvider.getLogger('AppTest')
 
@@ -42,7 +42,7 @@ describe('handler', () => {
         return await S3Helper.uploadFile(fileName, buffer.toLocaleString())
       })
       .then(async () => {
-        return await expect(App.handler(event)).rejects.toThrow(`No content for file ${fileName}`)
+        await expect(App.handler(event)).rejects.toThrow(`No content for file ${fileName}`)
       })
       .then(async () => {
         return await S3Helper.deleteFile(fileName)
