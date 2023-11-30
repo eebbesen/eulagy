@@ -1,14 +1,14 @@
 #!/bin/bash
 
 set -e
-setopt localoptions rmstarsilent
+# setopt localoptions rmstarsilent # not bash, but you need to run if you zsh
 
 echo 'removing node_modules'
-rm -rf node_modules/* 
+rm -rf node_modules/*
 echo 'done clearing node_modules'
 
 echo 'npm install --omit=dev'
-npm install --omit=dev       
+npm install --omit=dev
 
 echo 'running tsc to generate .js files for prod only'
 rm -rf distProd/*
