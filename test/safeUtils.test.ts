@@ -87,6 +87,11 @@ describe('propertyCheck', () => {
     expect(() => Utils.bucketProperty()).toThrow('No bucket name specified. BUCKET_NAME environment variable required.')
   })
 
+  it('throws error when no BUCKET_NAME key', () => {
+    delete process.env.BUCKET_NAME
+    expect(() => Utils.bucketProperty()).toThrow('No bucket name specified. BUCKET_NAME environment variable required.')
+  })
+
   it('accepts populated value', () => {
     process.env = { ...process.env, BUCKET_NAME: 'someval' }
     Utils.bucketProperty()
