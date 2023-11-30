@@ -11,7 +11,7 @@ import { log4TSProvider } from './config/LogConfig'
 const log = log4TSProvider.getLogger('App')
 
 export async function handler (event: S3Event): Promise<StartSpeechSynthesisTaskCommandOutput> {
-  log.info('incoming event', JSON.stringify(event))
+  log.info('incoming event', event)
 
   Utils.bucketProperty() // check early since program need this
 

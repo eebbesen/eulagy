@@ -22,6 +22,6 @@ describe('startSynthesizeSpeech', () => {
 
   it('throws error when no text', async () => {
     const chunks: any = 'bcd'.match(/[a]{1,2999}/g)
-    expect(async () => await PollyUtils.startSynthesizeSpeech(chunks)).rejects.toThrow('No text')
+    void expect(async () => await PollyUtils.startSynthesizeSpeech(chunks)).rejects.toThrow('No text')
   })
 })

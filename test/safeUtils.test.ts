@@ -96,5 +96,4 @@ describe('bucketProperty', () => {
     process.env = { ...process.env, BUCKET_NAME: 'someval' }
     Utils.bucketProperty()
   })
-
 })
