@@ -1,4 +1,5 @@
 import * as S3Helper from '../src/bucketUtils'
+import * as Utils from '../src/utils'
 import * as FsPromises from 'fs/promises'
 
 import {
@@ -29,7 +30,7 @@ describe('uploadFile, listBucketFiles, downloadFile, and deleteFile', () => {
       .then(async (ret: any) => {
         log.debug('After upload', JSON.stringify(ret))
         expect(ret?.$metadata?.httpStatusCode).toEqual(200)
-        return await S3Helper.listBucketFiles('eulagy')
+        return await S3Helper.listBucketFiles(Utils.bucketProperty())
       })
       .then(async (ret: any) => {
         log.debug('After upload list files', JSON.stringify(ret))
@@ -48,7 +49,7 @@ describe('uploadFile, listBucketFiles, downloadFile, and deleteFile', () => {
       .then(async (ret: any) => {
         log.debug('After delete', JSON.stringify(ret))
         expect(ret?.$metadata?.httpStatusCode).toEqual(204)
-        return await S3Helper.listBucketFiles('eulagy')
+        return await S3Helper.listBucketFiles(Utils.bucketProperty())
       })
       .then((ret: any) => {
         log.debug('After delete list files', JSON.stringify(ret))

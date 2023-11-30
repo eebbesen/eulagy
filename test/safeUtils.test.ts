@@ -71,3 +71,30 @@ describe('chunkText', () => {
     expect(() => Utils.chunkText('', 1)).toThrow('No text extracted')
   })
 })
+
+describe('bucketProperty', () => {
+  const originalProcessEnv = process.env
+  afterEach(() => { process.env = originalProcessEnv })
+
+  it('throws error when empty BUCKET_NAME', () => {
+    process.env = { ...process.env, BUCKET_NAME: '' }
+    expect(() => Utils.bucketProperty()).toThrow('No bucket name specified. BUCKET_NAME environment variable required.')
+  })
+
+  it('throws error when null BUCKET_NAME', () => {
+    let undefinedVal
+    process.env = { ...process.env, BUCKET_NAME: undefinedVal }
+    expect(() => Utils.bucketProperty()).toThrow('No bucket name specified. BUCKET_NAME environment variable required.')
+  })
+
+  it('throws error when no BUCKET_NAME key', () => {
+    delete process.env.BUCKET_NAME
+    expect(() => Utils.bucketProperty()).toThrow('No bucket name specified. BUCKET_NAME environment variable required.')
+  })
+
+  it('accepts populated value', () => {
+    process.env = { ...process.env, BUCKET_NAME: 'someval' }
+    Utils.bucketProperty()
+  })
+
+})

@@ -1,6 +1,6 @@
 {
   "name": "eulagy",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "EULAgy takes a text file, converts it to an mp3 and generates a csv based on the Amazon Comprehend findings",
   "main": "src/app.ts",
   "scripts": {
@@ -30,6 +30,7 @@
     "@aws-sdk/client-polly": ">=3.454.0",
     "@aws-sdk/client-s3": ">=3.456.0",
     "@types/aws-lambda": ">=8.10.129",
+    "@types/node": "^20.10.1",
     "debug": "4.3.4",
     "minimatch": ">=3.12",
     "ms": "2.1.2",
