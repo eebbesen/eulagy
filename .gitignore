@@ -134,3 +134,5 @@ distProd
 *.map
 
 builds/*.zip
+.scannerwork
+.vscode
