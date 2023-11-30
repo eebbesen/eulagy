@@ -9,5 +9,7 @@ jobs:
       - node/install-packages:
         pkg-manager: npm
       - run:
-          command: npm run test
+          command: |
+            BUCKET_NAME="eulagy"
+            npm run test
           name: Run tests
