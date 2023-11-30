@@ -72,7 +72,7 @@ describe('chunkText', () => {
   })
 })
 
-describe('propertyCheck', () => {
+describe('bucketProperty', () => {
   const originalProcessEnv = process.env
   afterEach(() => { process.env = originalProcessEnv })
 
