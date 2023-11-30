@@ -6,13 +6,15 @@ import { type StartSpeechSynthesisTaskCommandOutput } from '@aws-sdk/client-poll
 import { type DeleteObjectCommandOutput, type GetObjectCommandOutput, type PutObjectCommandOutput } from '@aws-sdk/client-s3'
 import { type DetectKeyPhrasesCommandOutput } from '@aws-sdk/client-comprehend'
 import { type S3Event } from 'aws-lambda'
-
 import { log4TSProvider } from './config/LogConfig'
 
 const log = log4TSProvider.getLogger('App')
 
 export async function handler (event: S3Event): Promise<StartSpeechSynthesisTaskCommandOutput> {
   log.info('incoming event', JSON.stringify(event))
+
+  Utils.bucketProperty() // check early since program need this
+
   const rec: S3Event['Records'] = event.Records
   const fileName: string = rec[0].s3.object.key
   log.info('processing file', fileName)

@@ -33,3 +33,11 @@ export function chunkText (text: string | undefined, limit: number): RegExpMatch
 
   return ret
 }
+
+export function bucketProperty(): string {
+  if (process.env.BUCKET_NAME === undefined ||
+      process.env.BUCKET_NAME?.trim().length < 1 ) {
+    throw new Error('No bucket name specified. BUCKET_NAME environment variable required.')
+  }
+  return process.env.BUCKET_NAME
+}

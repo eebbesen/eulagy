@@ -3,6 +3,7 @@ import {
   StartSpeechSynthesisTaskCommand,
   type StartSpeechSynthesisTaskCommandOutput
 } from '@aws-sdk/client-polly'
+import * as Utils from './utils'
 
 const pollyClient = new PollyClient({})
 
@@ -28,7 +29,7 @@ export async function startSynthesizeSpeech (text: RegExpMatchArray): Promise<St
     OutputFormat: 'mp3',
     Text: text[0],
     VoiceId: 'Kimberly',
-    OutputS3BucketName: 'eulagy',
+    OutputS3BucketName: Utils.bucketProperty(),
     OutputS3KeyPrefix: `uploaded/eulagy-${Date.now()}`
   })
   return await pollyClient.send(command)

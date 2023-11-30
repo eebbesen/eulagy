@@ -11,7 +11,6 @@ EULAgy is a utility that can be plugged into an application that will stream an 
 
 And (shhhh, don't tell) EULAgy will work for _any_ text file, not just EULAs :).
 
-
 * EULAgy uses Amazon Polly to create an mp3 from EULA text
 * EULAgy uses Amazon Comprehend to create a csv from EULA text
 * EULAgy is designed to work on AWS Lambda, but can also be run from the command line
@@ -20,13 +19,16 @@ And (shhhh, don't tell) EULAgy will work for _any_ text file, not just EULAs :).
 *In particular, code changes are required to remove hard-coded `eulagy` bucket name throughout the application!*
 
 ## Using
+### Environment variables
+EULAgy requires a populated `BUCKET_NAME` environment variable for tests and production
+
 ### AWS Lambda
 See Deploy below. Place txt files in the root S3 bucket -- output will appear in the `uploaded` folder of the S3 bucket.
 
 ## Develop
 1. [Install npm](https://www.npmjs.com/get-npm)
 1. `npm install`
-1. `npm test` to validate setup! 
+1. `npm test` to validate setup!
 1. `npm run liveTest` to run tests that actually hit S3
     * requires configured AWS CLI setup on box running tests -- (You'll need to have AWS credentials created, e.g., https://docs.aws.amazon.com/sdkref/latest/guide/file-format.html)
     * will incur AWS charges (up to several cents per full suite run in the cheapest AWS region)

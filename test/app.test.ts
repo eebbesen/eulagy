@@ -1,7 +1,7 @@
 import * as App from '../src/app'
 import * as FsPromises from 'fs/promises'
 import * as S3Helper from '../src/bucketUtils'
-// import { type S3PutEvent } from '../src/lib/S3PutEvent'
+import * as Utils from '../src/utils'
 import { type S3Event } from 'aws-lambda'
 import { log4TSProvider } from '../src/config/LogConfig'
 import { type StartSpeechSynthesisTaskCommandOutput } from '@aws-sdk/client-polly'
@@ -75,7 +75,7 @@ function createEvent (fileName: string): S3Event {
         s3SchemaVersion: '1.0',
         configurationId: 'abc',
         bucket: {
-          name: 'eulagy',
+          name: Utils.bucketProperty(),
           ownerIdentity: {
             principalId: 'xyz'
           },

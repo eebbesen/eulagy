@@ -12,6 +12,7 @@ import {
   PutObjectCommand,
   type PutObjectCommandOutput
 } from '@aws-sdk/client-s3'
+import * as Utils from './utils'
 import { log4TSProvider } from './config/LogConfig'
 
 const log = log4TSProvider.getLogger('BucketUtils')
@@ -22,7 +23,7 @@ export async function listBuckets (): Promise<ListBucketsCommandOutput> {
 };
 
 export function createBucket (name: string): void {
-  const bucketName = (name.length > 0) ? name : 'eulagy'
+  const bucketName = (name.length > 0) ? name : Utils.bucketProperty()
 
   listBuckets()
     .then(bs => {
@@ -47,24 +48,24 @@ export function createBucket (name: string): void {
 
 // lists files in S3 bucket
 export async function listBucketFiles (name: string): Promise<ListObjectsCommandOutput> {
-  const bucketName = (name.length > 0) ? name : 'eulagy'
+  const bucketName = (name.length > 0) ? name : Utils.bucketProperty()
   const listObjectsCommand = new ListObjectsCommand({ Bucket: bucketName })
   return await client.send(listObjectsCommand)
 };
 
 export async function downloadFile (name: string): Promise<GetObjectCommandOutput> {
-  const getObjectCommand = new GetObjectCommand({ Bucket: 'eulagy', Key: name, RequestPayer: 'requester' })
+  const getObjectCommand = new GetObjectCommand({ Bucket: Utils.bucketProperty(), Key: name, RequestPayer: 'requester' })
   return await client.send(getObjectCommand)
 }
 
 export async function deleteFile (name: string): Promise<DeleteObjectCommandOutput> {
-  const deleteObjectCommand = new DeleteObjectCommand({ Bucket: 'eulagy', Key: name })
+  const deleteObjectCommand = new DeleteObjectCommand({ Bucket: Utils.bucketProperty(), Key: name })
   return await client.send(deleteObjectCommand)
 };
 
 // uploads one file to S3 bucket
 export async function uploadFile (name: string, data: string): Promise<PutObjectCommandOutput> {
   log.debug(`file ${name} size is ${data.length}`)
-  const putObjectCommand = new PutObjectCommand({ Bucket: 'eulagy', Key: name, Body: data, ContentLength: data.length })
+  const putObjectCommand = new PutObjectCommand({ Bucket: Utils.bucketProperty(), Key: name, Body: data, ContentLength: data.length })
   return await client.send(putObjectCommand)
 }
