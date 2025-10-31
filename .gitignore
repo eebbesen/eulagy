@@ -136,3 +136,6 @@ distProd
 builds/*.zip
 .scannerwork
 .vscode
+
+snippets.md
+
